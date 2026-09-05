@@ -13,6 +13,7 @@ import SocialHoverCard from "@/components/pixel-perfect/social-hover-card";
 import { BannerParticles } from "@/components/BannerParticles";
 import { FileText } from "lucide-react";
 import Image from "next/image";
+import TrainingRunWidget from "@/components/TrainingRunWidget";
 
 const skillGroups = [
   {
@@ -81,7 +82,7 @@ export default function Home() {
 
       {/* Cell 1: Banner */}
       <div className="absolute left-0 right-0 md:left-[30%] md:right-[30%] top-0 h-[22vh] -z-0 pointer-events-auto overflow-hidden bg-white dark:bg-[#0b0e14] shadow-[0_4px_12px_rgba(2,6,23,0.04)] dark:shadow-[0_4px_12px_rgba(2,6,23,0.10)]">
-        <Image
+        {/* <Image
           src="/placeholder.png"
           alt=""
           fill
@@ -89,8 +90,8 @@ export default function Home() {
           sizes="(min-width: 768px) 40vw, 100vw"
           quality={100}
           className="object-cover object-center dark:hidden"
-        />
-        <Image
+        /> */}
+        {/* <Image
           src="/placeholder.png"
           alt=""
           fill
@@ -98,14 +99,15 @@ export default function Home() {
           sizes="(min-width: 768px) 40vw, 100vw"
           quality={100}
           className="hidden object-cover object-center dark:block"
-        />
-        <BannerParticles />
+        /> */}
+        {/* <BannerParticles /> */}
         <div className="absolute inset-x-0 bottom-0 h-10 pointer-events-none z-[5] bg-gradient-to-t from-white/90 to-transparent dark:from-[#0b0e14]/70 dark:to-transparent" />
         <div className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none z-20 bg-gradient-to-r from-white/90 to-transparent dark:from-[#0b0e14]/50 dark:to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none z-20 bg-gradient-to-l from-white/90 to-transparent dark:from-[#0b0e14]/50 dark:to-transparent" />
-        <div className="absolute bottom-3 right-2 z-10 pointer-events-auto">
+        <div className="absolute bottom-3 left-4 z-10 pointer-events-auto">
           <CurrentTime />
         </div>
+        <TrainingRunWidget className="bottom-3 right-2 w-[220px] h-[120px] z-30 pointer-events-none" />
       </div>
 
       {/* Cell 2: Profile Section - 112px height to wrap the framed image (13px gap top/bottom) */}
