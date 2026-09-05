@@ -24,7 +24,7 @@ interface FlipCoverButtonProps {
 export function FlipCoverButton({
   href = "https://cal.com/ashutosh-singh-1fqn5v/30min",
   label = "Book an intro call",
-  innerLabel = "cal.com",
+  innerLabel = "Twitter DM",
   className = "",
 }: FlipCoverButtonProps) {
   return (

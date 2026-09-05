@@ -8,7 +8,6 @@ import { KeyBadge } from "@/components/SectionNav";
 import { RightNavbar } from "@/components/RightNavbar";
 import Link from "next/link";
 import SoftPillButton from "@/components/pixel-perfect/soft-pill-button";
-import { FlipCoverButton } from "@/components/pixel-perfect/flip-cover-button";
 import SocialHoverCard from "@/components/pixel-perfect/social-hover-card";
 import { BannerParticles } from "@/components/BannerParticles";
 import { FileText } from "lucide-react";
@@ -162,7 +161,21 @@ export default function Home() {
 
         {/* Buttons */}
         <div className="flex flex-wrap items-center gap-2 mt-4">
-          <FlipCoverButton href="https://x.com/messages/compose?recipient_id=bariankitvinod" label="Twitter DM" innerLabel="Twitter DM" />
+          <Link href="https://x.com/messages/compose?recipient_id=bariankitvinod" target="_blank" rel="noopener noreferrer">
+            <SoftPillButton
+              as="span"
+              variant="primary"
+              className="px-3 py-1.5 !text-[12px]"
+            >
+              <div className="flex items-center gap-1.5">
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Twitter DM
+              </div>
+            </SoftPillButton>
+          </Link>
           <Link href="mailto:bariankitvinod@gmail.com">
             <SoftPillButton
               as="span"
