@@ -153,32 +153,8 @@ export default function TrainingRunWidget({ className = "" }: TrainingRunWidgetP
       // --- header ---
       ctx.font = `${fontBig}px "Courier Prime", "Courier New", monospace`;
       ctx.fillStyle = "#f0fdf4";
-      ctx.fillText("my focus", padX, headerH * 0.55);
-      ctx.fillText("is on training", padX, headerH * 0.98);
-
-      const pulse = 0.5 + 0.5 * Math.sin(now / 260);
-      ctx.beginPath();
-      ctx.fillStyle = `rgba(134, 239, 172, ${0.5 + 0.5 * pulse})`;
-      ctx.arc(cssW - padX, 10, Math.max(2, cssW * 0.012), 0, Math.PI * 2);
-      ctx.fill();
-
-      // --- legend, top right, small dots instead of numbers ---
-      ctx.font = `${fontSmall}px "Courier Prime", "Courier New", monospace`;
-      const legendY = headerH * 0.98;
-      const dotR = Math.max(1.6, cssW * 0.01);
-      ctx.beginPath();
-      ctx.fillStyle = "#4ade80";
-      ctx.arc(cssW - padX - 28, legendY - dotR, dotR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "rgba(240, 253, 244, 0.65)";
-      ctx.fillText("train", cssW - padX - 22, legendY);
-
-      ctx.beginPath();
-      ctx.fillStyle = "#a78bfa";
-      ctx.arc(cssW - padX - 8, legendY - dotR, dotR, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "rgba(240, 253, 244, 0.65)";
-      ctx.fillText("val", cssW - padX - 2, legendY);
+      ctx.fillText("my focus", padX-20, headerH * 0.55);
+      ctx.fillText("is on training", padX-20, headerH * 0.98);
 
       // --- grid ---
       ctx.strokeStyle = "rgba(240, 253, 244, 0.08)";
