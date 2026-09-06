@@ -147,32 +147,39 @@ export default function Home() {
       {/* Flowing Content Section */}
       <div className="ml-0 mr-0 md:ml-[30%] md:mr-[30%] pt-[calc(22vh+112px)] pb-0 px-4 flex flex-col z-10 relative min-h-screen">
         <p className="text-[14px] sm:text-[15px] text-zinc-600 dark:text-zinc-300 leading-relaxed mt-4">
-          AI and Research Engineer, building model architectures and mathematics with CUDA kernels.
+          AI Engineer | Multimodal and Multilingual model | Model Architectures, Mathematical Foundations & Custom CUDA Kernels
         </p>
 
         <ul className="text-[14px] sm:text-[15px] text-zinc-600 dark:text-zinc-300 leading-relaxed mt-4 pl-4">
-          <li className="flex gap-1.5"><span>•</span><span>AI, open source, and developer tools excite me.</span></li>
-          <li className="flex gap-1.5"><span>•</span><span>I believe actions speak louder than words, so I put my code where my mouth is.</span></li>
-          <li className="flex gap-1.5"><span>•</span><span>40% Researching, 20% Building, 40% Deploying</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>35% Researching, 30% Building, 35% Inference & Deploying</span></li>
           <li className="flex gap-1.5"><span>•</span><span>Trying to build models (Multimodal and Multilingual) at the best possible with the resources I have!</span></li>
           <li className="flex gap-1.5"><span>•</span><span>Not done yet, optimize GPU for training and model for production</span></li>
           <li className="flex gap-1.5"><span>•</span><span>Currently Building: <span className="font-semibold text-zinc-900 dark:text-white">SkyBoy</span></span></li>
         </ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <div className="flex flex-col items-center justify-center px-4 py-5 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0a0a0a] dark:hover:bg-[#121214] border border-black/30 dark:border-white/[0.15] rounded-[6px] transition-colors duration-200">
+            <span className="text-[16px] sm:text-[18px] font-bold text-zinc-800 dark:text-zinc-100 tracking-tight leading-none">3.5+ years</span>
+            <span className="text-[13px] sm:text-[14px] text-zinc-500 dark:text-zinc-400 mt-1.5 text-center">of experimenting</span>
+          </div>
+          <div className="flex flex-col items-center justify-center px-4 py-5 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0a0a0a] dark:hover:bg-[#121214] border border-black/30 dark:border-white/[0.15] rounded-[6px] transition-colors duration-200">
+            <span className="text-[16px] sm:text-[18px] font-bold text-zinc-800 dark:text-zinc-100 tracking-tight leading-none">1.5+ years</span>
+            <span className="text-[13px] sm:text-[14px] text-zinc-500 dark:text-zinc-400 mt-1.5 text-center">of internship experience</span>
+          </div>
+        </div>
 
         {/* Buttons */}
         <div className="flex flex-wrap items-center gap-2 mt-4">
-          <Link href="https://x.com/messages/compose?recipient_id=bariankitvinod" target="_blank" rel="noopener noreferrer">
+          <Link href="https://x.com/messages/compose?recipient_id=@bariankitvinod" target="_blank" rel="noopener noreferrer">
             <SoftPillButton
               as="span"
               variant="primary"
               className="px-3 py-1.5 !text-[12px]"
             >
               <div className="flex items-center gap-1.5">
-                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
-                Twitter DM
+                <span>DM me</span>
               </div>
             </SoftPillButton>
           </Link>
