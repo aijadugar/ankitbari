@@ -36,6 +36,7 @@ interface ContributionsData {
   huggingface: {
     models: HFModel[];
     spaces: HFSpace[];
+    datasets: HFModel[];
     error?: string;
   };
   kaggle: {
@@ -151,12 +152,18 @@ export function OpenSourceContributions({ isFullPage = false }: { isFullPage?: b
             <KeyBadge sectionId="opensource" shortcutKey="o" />
             Latent Space Contributions
           </h2>
-          <p className="text-[12px] text-zinc-500 dark:text-zinc-400 -mt-0.5">
+          {/* <p className="text-[12px] text-zinc-500 dark:text-zinc-400 -mt-0.5">
             GitHub · Hugging Face · Kaggle
-          </p>
+          </p> */}
         </div>
 
         {/* Toggle */}
+
+        {/* Horizontal line below heading */}
+        <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+        <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+        <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+      </div>
         <div className="flex items-center gap-2 relative z-20 group mr-[8px]">
           <div className="absolute -inset-[5px] border border-black/5 dark:border-white/5 rounded-[11px] pointer-events-none transition-colors duration-300 group-hover:border-black/10 dark:group-hover:border-white/10" />
           <div className="relative grid grid-cols-3 p-1 bg-zinc-50 dark:bg-[#09090b] rounded-[6px] border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80 w-fit select-none">
@@ -178,12 +185,6 @@ export function OpenSourceContributions({ isFullPage = false }: { isFullPage?: b
             ))}
           </div>
         </div>
-
-        {/* Horizontal line below heading */}
-        <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
-        <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
-        <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
-      </div>
 
       <div className="relative pt-2 pb-2">
         <div
@@ -275,6 +276,16 @@ function SectionShell({
   );
 }
 
+type GHFilter = "MERGED" | "OPEN" | "CLOSED";
+
+const GH_FILTERS: GHFilter[] = ["MERGED", "OPEN", "CLOSED"];
+
+const GH_FILTER_LABELS: Record<GHFilter, string> = {
+  MERGED: "Merged",
+  OPEN: "Open",
+  CLOSED: "Closed",
+};
+
 function GitHubSection({
   data,
   initialCount,
@@ -284,14 +295,49 @@ function GitHubSection({
   initialCount: number;
   isFullPage: boolean;
 }) {
-  const prs = data.github.prs;
+  const [ghFilter, setGhFilter] = useState<GHFilter>("MERGED");
+
+  const allPrs = data.github.prs;
+  const prs = allPrs.filter((pr) => pr.state === ghFilter);
+  const counts: Record<GHFilter, number> = {
+    MERGED: allPrs.filter((pr) => pr.state === "MERGED").length,
+    OPEN: allPrs.filter((pr) => pr.state === "OPEN").length,
+    CLOSED: allPrs.filter((pr) => pr.state === "CLOSED").length,
+  };
+
   return (
     <SectionShell
       isFullPage={isFullPage}
       total={prs.length}
       initialCount={initialCount}
-      emptyText="No pull requests found. (Add GITHUB_TOKEN in Vercel and redeploy)"
+      emptyText={`No ${GH_FILTER_LABELS[ghFilter].toLowerCase()} pull requests found. (Add GITHUB_TOKEN in Vercel and redeploy)`}
     >
+      {/* PR state sub-tabs */}
+      <div className="flex items-center justify-center gap-2 relative group mb-2 -mt-1">
+        <div className="relative grid grid-cols-3 p-1 bg-zinc-50 dark:bg-[#09090b] rounded-[6px] border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80 w-fit select-none">
+          <div
+            className={`absolute top-1 bottom-1 left-1 rounded-[4px] bg-white dark:bg-[#1e1e20] border border-zinc-200/50 dark:border-cyan-500/30 shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] transform will-change-transform ${ghFilter === "MERGED" ? "translate-x-0" : ghFilter === "OPEN" ? "translate-x-[100%]" : "translate-x-[200%]"
+              }`}
+            style={{ width: "calc((100% - 8px) / 3)" }}
+          />
+          {GH_FILTERS.map((f) => (
+            <button
+              key={f}
+              onClick={() => setGhFilter(f)}
+              className={`z-10 relative px-3 py-1.5 text-[12px] font-medium text-center transition-colors duration-200 ${ghFilter === f
+                ? "text-zinc-900 dark:text-cyan-200"
+                : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                }`}
+            >
+              {GH_FILTER_LABELS[f]}
+              <span className={`ml-1.5 text-[10px] ${ghFilter === f ? "text-zinc-400 dark:text-cyan-400/70" : "text-zinc-400 dark:text-zinc-600"
+                }`}>
+                {counts[f]}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
       {prs.slice(0, isFullPage ? prs.length : initialCount).map((pr, idx, arr) => {
         const isLast = idx === arr.length - 1;
         return (
@@ -333,6 +379,16 @@ function GitHubSection({
   );
 }
 
+type HFKind = "spaces" | "models" | "datasets";
+
+const HF_KINDS: HFKind[] = ["spaces", "models", "datasets"];
+
+const HF_KIND_LABELS: Record<HFKind, string> = {
+  spaces: "Spaces",
+  models: "Models",
+  datasets: "Datasets",
+};
+
 function HuggingFaceSection({
   data,
   initialCount,
@@ -342,19 +398,75 @@ function HuggingFaceSection({
   initialCount: number;
   isFullPage: boolean;
 }) {
+  const [hfKind, setHfKind] = useState<HFKind>("spaces");
+
   const models = data.huggingface.models;
   const spaces = data.huggingface.spaces;
-  const total = models.length + spaces.length;
+  const datasets = data.huggingface.datasets;
+
+  const counts: Record<HFKind, number> = {
+    spaces: spaces.length,
+    models: models.length,
+    datasets: datasets.length,
+  };
+
+  let items: HFModel[] = [];
+  let kindLabel = "Space";
+  let dotCls = "bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]";
+  let badgeCls = "border-indigo-500/30 bg-indigo-500/10 text-indigo-300";
+  let showDownloads = false;
+  if (hfKind === "spaces") {
+    items = spaces;
+    kindLabel = "Space";
+  } else if (hfKind === "models") {
+    items = models;
+    kindLabel = "Model";
+    dotCls = "bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.5)]";
+    badgeCls = "border-cyan-500/30 bg-cyan-500/10 text-cyan-300";
+    showDownloads = true;
+  } else {
+    items = datasets;
+    kindLabel = "Dataset";
+    dotCls = "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]";
+    badgeCls = "border-emerald-500/30 bg-emerald-500/10 text-emerald-300";
+    showDownloads = true;
+  }
 
   return (
     <SectionShell
       isFullPage={isFullPage}
-      total={total}
+      total={items.length}
       initialCount={initialCount}
-      emptyText="No models or spaces found. (Add HUGGINGFACE_TOKEN in Vercel and redeploy)"
+      emptyText={`No ${HF_KIND_LABELS[hfKind].toLowerCase()} found. (Add HUGGINGFACE_TOKEN in Vercel and redeploy)`}
     >
-      {models.slice(0, isFullPage ? models.length : Math.ceil(initialCount / 2)).map((m, idx, arr) => {
-        const isLast = idx === arr.length - 1 && spaces.length === 0;
+      {/* HF sub-tabs */}
+      <div className="flex items-center justify-center gap-2 relative group mb-2 -mt-1">
+        <div className="relative grid grid-cols-3 p-1 bg-zinc-50 dark:bg-[#09090b] rounded-[6px] border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80 w-fit select-none">
+          <div
+            className={`absolute top-1 bottom-1 left-1 rounded-[4px] bg-white dark:bg-[#1e1e20] border border-zinc-200/50 dark:border-cyan-500/30 shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] transform will-change-transform ${hfKind === "spaces" ? "translate-x-0" : hfKind === "models" ? "translate-x-[100%]" : "translate-x-[200%]"
+              }`}
+            style={{ width: "calc((100% - 8px) / 3)" }}
+          />
+          {HF_KINDS.map((k) => (
+            <button
+              key={k}
+              onClick={() => setHfKind(k)}
+              className={`z-10 relative px-3 py-1.5 text-[12px] font-medium text-center transition-colors duration-200 ${hfKind === k
+                ? "text-zinc-900 dark:text-cyan-200"
+                : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                }`}
+            >
+              {HF_KIND_LABELS[k]}
+              <span className={`ml-1.5 text-[10px] ${hfKind === k ? "text-zinc-400 dark:text-cyan-400/70" : "text-zinc-400 dark:text-zinc-600"
+                }`}>
+                {counts[k]}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      {items.slice(0, isFullPage ? items.length : initialCount).map((m, idx, arr) => {
+        const isLast = idx === arr.length - 1;
         return (
           <a
             key={m.link}
@@ -373,52 +485,19 @@ function HuggingFaceSection({
               />
             )}
             <div className="flex items-center gap-2.5 relative z-20 min-w-0">
-              <div className="w-2 h-2 rounded-full shrink-0 bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
-              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-[4px] border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 shrink-0">
-                Model
+              <div className={`w-2 h-2 rounded-full shrink-0 ${dotCls}`} />
+              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-[4px] border ${badgeCls} shrink-0`}>
+                {kindLabel}
               </span>
               <h3 className="text-[14px] font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-cyan-100 transition-colors truncate">
                 {m.id}
               </h3>
             </div>
             <div className="flex items-center gap-3 shrink-0 relative z-20 text-[11px] text-zinc-500 dark:text-zinc-400">
-              <span title="downloads">↓ {formatNumber(m.downloads)}</span>
+              {showDownloads && (
+                <span title="downloads">↓ {formatNumber(m.downloads)}</span>
+              )}
               <span title="likes" className="text-rose-400">♥ {formatNumber(m.likes)}</span>
-            </div>
-          </a>
-        );
-      })}
-
-      {spaces.slice(0, isFullPage ? spaces.length : Math.floor(initialCount / 2)).map((s, idx, arr) => {
-        const isLast = idx === arr.length - 1;
-        return (
-          <a
-            key={s.link}
-            href={s.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex items-center justify-between gap-3 py-4 px-4 -mx-4 transition-colors hover:bg-zinc-50 dark:hover:bg-cyan-500/5 rounded-lg"
-          >
-            {!isLast && (
-              <div
-                className="absolute bottom-0 left-0 right-0 h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none z-10"
-                style={{
-                  maskImage: "repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)",
-                  WebkitMaskImage: "repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)",
-                }}
-              />
-            )}
-            <div className="flex items-center gap-2.5 relative z-20 min-w-0">
-              <div className="w-2 h-2 rounded-full shrink-0 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
-              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-[4px] border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 shrink-0">
-                Space
-              </span>
-              <h3 className="text-[14px] font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-cyan-100 transition-colors truncate">
-                {s.id}
-              </h3>
-            </div>
-            <div className="flex items-center gap-3 shrink-0 relative z-20 text-[11px] text-zinc-500 dark:text-zinc-400">
-              <span title="likes" className="text-rose-400">♥ {formatNumber(s.likes)}</span>
             </div>
           </a>
         );
@@ -426,6 +505,16 @@ function HuggingFaceSection({
     </SectionShell>
   );
 }
+
+type KaggleKind = "notebooks" | "models" | "datasets";
+
+const KAGGLE_KINDS: KaggleKind[] = ["notebooks", "models", "datasets"];
+
+const KAGGLE_KIND_LABELS: Record<KaggleKind, string> = {
+  notebooks: "Notebooks",
+  models: "Models",
+  datasets: "Datasets",
+};
 
 function KaggleSection({
   data,
@@ -436,10 +525,30 @@ function KaggleSection({
   initialCount: number;
   isFullPage: boolean;
 }) {
+  const [kaggleKind, setKaggleKind] = useState<KaggleKind>("notebooks");
+
   const notebooks = data.kaggle.notebooks;
   const datasets = data.kaggle.datasets;
   const models = data.kaggle.models;
-  const total = notebooks.length + datasets.length + models.length;
+
+  const counts: Record<KaggleKind, number> = {
+    notebooks: notebooks.length,
+    models: models.length,
+    datasets: datasets.length,
+  };
+
+  let items: KaggleItem[] = notebooks;
+  let kindLabel = "Notebook";
+  if (kaggleKind === "models") {
+    items = models;
+    kindLabel = "Model";
+  } else if (kaggleKind === "datasets") {
+    items = datasets;
+    kindLabel = "Dataset";
+  }
+
+  // Highest-voted first.
+  items = [...items].sort((a: KaggleItem, b: KaggleItem) => b.votes - a.votes);
 
   const renderItem = (item: KaggleItem, kind: string, isLast: boolean, link: string) => (
     <a
@@ -473,23 +582,41 @@ function KaggleSection({
     </a>
   );
 
-  const perKind = isFullPage ? 24 : Math.ceil(initialCount / 3);
-
   return (
     <SectionShell
       isFullPage={isFullPage}
-      total={total}
+      total={items.length}
       initialCount={initialCount}
-      emptyText="No notebooks, datasets, or models found. (Add KAGGLE_USERNAME / KAGGLE_KEY in Vercel and redeploy)"
+      emptyText={`No ${KAGGLE_KIND_LABELS[kaggleKind].toLowerCase()} found. (Add KAGGLE_USERNAME / KAGGLE_KEY in Vercel and redeploy)`}
     >
-      {notebooks.slice(0, perKind).map((n, idx, arr) =>
-        renderItem(n, "Notebook", idx === arr.length - 1 && datasets.length === 0 && models.length === 0, n.link)
-      )}
-      {datasets.slice(0, perKind).map((d, idx, arr) =>
-        renderItem(d, "Dataset", idx === arr.length - 1 && models.length === 0, d.link)
-      )}
-      {models.slice(0, perKind).map((m, idx, arr) =>
-        renderItem(m, "Model", idx === arr.length - 1, m.link)
+      {/* Kaggle sub-tabs */}
+      <div className="flex items-center justify-center gap-2 relative group mb-2 -mt-1">
+        <div className="relative grid grid-cols-3 p-1 bg-zinc-50 dark:bg-[#09090b] rounded-[6px] border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80 w-fit select-none">
+          <div
+            className={`absolute top-1 bottom-1 left-1 rounded-[4px] bg-white dark:bg-[#1e1e20] border border-zinc-200/50 dark:border-cyan-500/30 shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] transform will-change-transform ${kaggleKind === "notebooks" ? "translate-x-0" : kaggleKind === "models" ? "translate-x-[100%]" : "translate-x-[200%]"
+              }`}
+            style={{ width: "calc((100% - 8px) / 3)" }}
+          />
+          {KAGGLE_KINDS.map((k) => (
+            <button
+              key={k}
+              onClick={() => setKaggleKind(k)}
+              className={`z-10 relative px-3 py-1.5 text-[12px] font-medium text-center transition-colors duration-200 ${kaggleKind === k
+                ? "text-zinc-900 dark:text-cyan-200"
+                : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200"
+                }`}
+            >
+              {KAGGLE_KIND_LABELS[k]}
+              <span className={`ml-1.5 text-[10px] ${kaggleKind === k ? "text-zinc-400 dark:text-cyan-400/70" : "text-zinc-400 dark:text-zinc-600"
+                }`}>
+                {counts[k]}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      {items.slice(0, isFullPage ? items.length : initialCount).map((item, idx, arr) =>
+        renderItem(item, kindLabel, idx === arr.length - 1, item.link)
       )}
     </SectionShell>
   );

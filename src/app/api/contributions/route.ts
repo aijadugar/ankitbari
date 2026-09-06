@@ -4,7 +4,7 @@ export const revalidate = 3600;
 
 const GITHUB_USERNAME = process.env.GITHUB_USERNAME || "aijadugar";
 const HF_USERNAME = process.env.HF_USERNAME || "aijadugar";
-const KAGGLE_USERNAME = process.env.KAGGLE_USERNAME || "";
+const KAGGLE_USERNAME = process.env.KAGGLE_USERNAME || "bariankitvinod";
 
 const HF_API = "https://huggingface.co/api";
 const KAGGLE_API = "https://www.kaggle.com/api/v1";
@@ -22,6 +22,7 @@ interface ContributionsData {
   huggingface: {
     models: { id: string; downloads: number; likes: number; link: string }[];
     spaces: { id: string; likes: number; link: string }[];
+    datasets: { id: string; downloads: number; likes: number; link: string }[];
     error?: string;
   };
   kaggle: {
@@ -37,9 +38,15 @@ async function fetchGitHub(token: string): Promise<ContributionsData["github"]> 
     return { prs: [], error: "Missing GITHUB_TOKEN" };
   }
 
+  // Paginate through every PR matching the author. GitHub search caps each
+  // page at 100 and the total result set at 1000, so we loop until we've
+  // drained the cursor (or hit the 1000 ceiling).
+  const MAX_TOTAL = 1000;
+  const PAGE_SIZE = 100;
+
   const query = `
-    query {
-      search(query: "author:${GITHUB_USERNAME} type:pr", type: ISSUE, first: 10) {
+    query($cursor: String) {
+      search(query: "author:${GITHUB_USERNAME} type:pr", type: ISSUE, first: ${PAGE_SIZE}, after: $cursor) {
         edges {
           node {
             ... on PullRequest {
@@ -47,40 +54,65 @@ async function fetchGitHub(token: string): Promise<ContributionsData["github"]> 
               url
               state
               createdAt
+              mergedAt
               repository { nameWithOwner }
             }
           }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
         }
       }
     }`;
 
   try {
-    const res = await fetch("https://api.github.com/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ query }),
-      next: { revalidate: 3600 },
-    });
+    const prs: GHPR[] = [];
+    let cursor: string | null = null;
 
-    const data = await res.json();
-    const edges = data?.data?.search?.edges ?? [];
-    const prs: GHPR[] = edges
-      .map((e: { node?: any }) => e?.node)
-      .filter(Boolean)
-      .map((n: any) => ({
-        title: n.title,
-        url: n.url,
-        repository: n.repository?.nameWithOwner ?? "",
-        state: n.state,
-        createdAt: n.createdAt,
-      }))
-      .sort(
-        (a: GHPR, b: GHPR) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+    do {
+      const res = await fetch("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ query, variables: { cursor } }),
+        next: { revalidate: 3600 },
+      });
+
+      const data = await res.json();
+      const search = data?.data?.search;
+      const edges = search?.edges ?? [];
+
+      for (const e of edges) {
+        const n = e?.node;
+        if (!n) continue;
+        // GraphQL `state` is OPEN | CLOSED. A closed PR that was merged
+        // reports MERGED here (mergedAt is set); otherwise it's CLOSED.
+        const state: GHPR["state"] =
+          n.state === "OPEN"
+            ? "OPEN"
+            : n.mergedAt
+            ? "MERGED"
+            : "CLOSED";
+        prs.push({
+          title: n.title,
+          url: n.url,
+          repository: n.repository?.nameWithOwner ?? "",
+          state,
+          createdAt: n.createdAt,
+        });
+      }
+
+      const pageInfo = search?.pageInfo ?? {};
+      cursor = pageInfo.hasNextPage ? pageInfo.endCursor : null;
+    } while (cursor && prs.length < MAX_TOTAL);
+
+    prs.sort(
+      (a: GHPR, b: GHPR) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
     return { prs };
   } catch (err) {
@@ -92,37 +124,56 @@ async function fetchHuggingFace(token: string): Promise<ContributionsData["huggi
   const headers: Record<string, string> = { Accept: "application/json" };
   if (token) headers.Authorization = `Bearer ${token}`;
 
+  // Hugging Face's list endpoints are paginated via `limit` + `offset`.
+  // We page through all results (cap at 1000) so every sub-tab is complete.
+  const PAGE_SIZE = 100;
+  const MAX_TOTAL = 1000;
+
+  const fetchAll = async (
+    path: string,
+    make: (item: any) => { id: string; downloads: number; likes: number; link: string }
+  ) => {
+    const items: { id: string; downloads: number; likes: number; link: string }[] = [];
+    let offset = 0;
+    do {
+      const res = await fetch(
+        `${HF_API}/${path}?author=${HF_USERNAME}&sort=downloads&direction=-1&limit=${PAGE_SIZE}&offset=${offset}`,
+        { headers, next: { revalidate: 3600 } }
+      );
+      if (!res.ok) break;
+      const json = (await res.json()) as any[];
+      if (!Array.isArray(json) || json.length === 0) break;
+      for (const item of json) items.push(make(item));
+      offset += PAGE_SIZE;
+    } while (items.length < MAX_TOTAL && items.length % PAGE_SIZE === 0);
+    return items;
+  };
+
   try {
-    const [modelsRes, spacesRes] = await Promise.all([
-      fetch(
-        `${HF_API}/models?author=${HF_USERNAME}&sort=downloads&direction=-1&limit=8`,
-        { headers, next: { revalidate: 3600 } }
-      ),
-      fetch(
-        `${HF_API}/spaces?author=${HF_USERNAME}&sort=likes&direction=-1&limit=8`,
-        { headers, next: { revalidate: 3600 } }
-      ),
+    const [models, spaces, datasets] = await Promise.all([
+      fetchAll("models", (m) => ({
+        id: m.id,
+        downloads: m.downloads ?? 0,
+        likes: m.likes ?? 0,
+        link: `https://huggingface.co/${m.id}`,
+      })),
+      fetchAll("spaces", (s) => ({
+        id: s.id,
+        downloads: 0,
+        likes: s.likes ?? 0,
+        link: `https://huggingface.co/spaces/${s.id}`,
+      })),
+      fetchAll("datasets", (d) => ({
+        id: d.id,
+        downloads: d.downloads ?? 0,
+        likes: d.likes ?? 0,
+        link: `https://huggingface.co/datasets/${d.id}`,
+      })),
     ]);
 
-    const modelsJson = modelsRes.ok ? await modelsRes.json() : [];
-    const spacesJson = spacesRes.ok ? await spacesRes.json() : [];
-
-    const models = (modelsJson as any[]).map((m) => ({
-      id: m.id,
-      downloads: m.downloads ?? 0,
-      likes: m.likes ?? 0,
-      link: `https://huggingface.co/${m.id}`,
-    }));
-
-    const spaces = (spacesJson as any[]).map((s) => ({
-      id: s.id,
-      likes: s.likes ?? 0,
-      link: `https://huggingface.co/spaces/${s.id}`,
-    }));
-
-    return { models, spaces };
+    return { models, spaces, datasets };
   } catch {
-    return { models: [], spaces: [], error: "Failed to fetch Hugging Face activity" };
+    return { models: [], spaces: [], datasets: [], error: "Failed to fetch Hugging Face activity" };
   }
 }
 
@@ -137,35 +188,59 @@ async function fetchKaggle(username: string, key: string): Promise<Contributions
     "Content-Type": "application/json",
   };
 
+  // Kaggle endpoint quirks:
+  //  - kernels/list & datasets/list: flat array, paged via `page=N` (max pageSize 100).
+  //  - models/list: returns { models, nextPageToken }, paged via `nextPageToken`.
+  //  - auth param differs: `user=` for kernels/datasets, `owner=` for models.
+  const fetchList = async (path: string, param: "user" | "owner") => {
+    const all: any[] = [];
+    let page = 1;
+    do {
+      const res = await fetch(
+        `${KAGGLE_API}/${path}?${param}=${username}&pageSize=100&page=${page}`,
+        { headers, next: { revalidate: 3600 } }
+      );
+      if (!res.ok) break;
+      const json = (await res.json()) as any[];
+      if (!Array.isArray(json) || json.length === 0) break;
+      for (const item of json) all.push(item);
+      page += 1;
+    } while (all.length < 100000);
+    return all;
+  };
+
+  const fetchModels = async () => {
+    const all: any[] = [];
+    let pageToken = "";
+    do {
+      const url = `${KAGGLE_API}/models/list?owner=${username}&pageSize=100${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ""}`;
+      const res = await fetch(url, { headers, next: { revalidate: 3600 } });
+      if (!res.ok) break;
+      const json = (await res.json()) as { models?: any[]; nextPageToken?: string };
+      for (const m of json.models ?? []) all.push(m);
+      pageToken = json.nextPageToken ?? "";
+    } while (pageToken);
+    return all;
+  };
+
   try {
-    const [notebooksRes, datasetsRes, modelsRes] = await Promise.all([
-      fetch(`${KAGGLE_API}/kernels/list?owner=${username}&pageSize=8`, {
-        headers,
-        next: { revalidate: 3600 },
-      }),
-      fetch(`${KAGGLE_API}/datasets/list?owner=${username}&pageSize=8`, {
-        headers,
-        next: { revalidate: 3600 },
-      }),
-      fetch(`${KAGGLE_API}/models/list?owner=${username}&pageSize=8`, {
-        headers,
-        next: { revalidate: 3600 },
-      }),
+    const [notebooksJson, datasetsJson, modelsJson] = await Promise.all([
+      fetchList("kernels/list", "user"),
+      fetchList("datasets/list", "user"),
+      fetchModels(),
     ]);
 
-    const notebooksJson = notebooksRes.ok ? await notebooksRes.json() : [];
-    const datasetsJson = datasetsRes.ok ? await datasetsRes.json() : [];
-    const modelsJson = modelsRes.ok ? await modelsRes.json() : [];
-
-    const toItem = (x: any, base: string) => ({
-      title: x.title ?? x.ref?.split("/").pop() ?? x.ref,
+    const toItem = (x: any, base: string, titleKey: string) => ({
+      title: x[titleKey] ?? x.ref?.split("/").pop() ?? x.ref,
       link: `https://www.kaggle.com/${base}/${x.ref}`,
-      votes: x.totalVotes ?? x.voteCount ?? 0,
+      votes: x.totalVotes ?? x.voteCount ?? x.usefulCount ?? 0,
     });
 
-    const notebooks = (notebooksJson as any[]).filter((k) => k.kernelType === "notebook").map((k) => toItem(k, "code"));
-    const datasets = (datasetsJson as any[]).map((d) => toItem(d, "datasets"));
-    const models = (modelsJson as any[]).map((m) => toItem(m, "models"));
+    const notebooks = (notebooksJson as any[])
+      .filter((k) => !k.kernelType || k.kernelType === "notebook" || k.kernelType === "script")
+      .map((k) => toItem(k, "code", "title"));
+    const datasets = (datasetsJson as any[]).map((d) => toItem(d, "datasets", "title"));
+    const models = (modelsJson as any[]).map((m) => toItem(m, "models", "title"));
 
     return { notebooks, datasets, models };
   } catch {
@@ -174,10 +249,14 @@ async function fetchKaggle(username: string, key: string): Promise<Contributions
 }
 
 export async function GET() {
+  // Trim env values so stray newlines / CRLF in .env.local can't corrupt
+  // the Basic auth header (a trailing CR silently 401s the Kaggle API).
+  const trim = (v: string | undefined) => (v ?? "").trim();
+
   const [github, huggingface, kaggle] = await Promise.all([
-    fetchGitHub(process.env.GITHUB_TOKEN || ""),
-    fetchHuggingFace(process.env.HUGGINGFACE_TOKEN || ""),
-    fetchKaggle(KAGGLE_USERNAME, process.env.KAGGLE_KEY || ""),
+    fetchGitHub(trim(process.env.GITHUB_TOKEN)),
+    fetchHuggingFace(trim(process.env.HUGGINGFACE_TOKEN)),
+    fetchKaggle(trim(KAGGLE_USERNAME), trim(process.env.KAGGLE_KEY)),
   ]);
 
   return NextResponse.json(

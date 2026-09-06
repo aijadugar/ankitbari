@@ -67,7 +67,7 @@ const experiences: ExperienceData[] = [
   },
   {
     title: "The SMM Hub",
-    role: "AI Researcher Intern",
+    role: "AI Research Intern",
     type: "Internship",
     dates: "Jun 2025 - Nov 2025",
     location: "Mumbai, Maharashtra, India · On-site",
@@ -75,10 +75,9 @@ const experiences: ExperienceData[] = [
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      Worked as an AI Researcher Intern, contributing to AI-driven products, backend services, and automation systems
+      Worked as an AI Research Intern, contributing to AI-driven products, backend services, and automation systems
       Collaborated across teams to build intelligent lead-generation solutions, content creation platforms, and workflow automation tools
       Streamlined business operations and improved user experiences through automation
-      Skills: Generative AI Tools, Prompt Engineering, and more
     `,
     tech: [
       "Generative AI Tools",

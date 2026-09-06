@@ -72,7 +72,7 @@ const experiences: ExperienceData[] = [
   },
   {
     title: "The SMM Hub",
-    role: "AI Researcher Intern",
+    role: "AI Research Intern",
     type: "Internship",
     dates: "Jun 2025 - Nov 2025",
     location: "Mumbai, Maharashtra, India · On-site",
@@ -83,7 +83,6 @@ const experiences: ExperienceData[] = [
       Worked as an AI Researcher Intern, contributing to AI-driven products, backend services, and automation systems
       Collaborated across teams to build intelligent lead-generation solutions, content creation platforms, and workflow automation tools
       Streamlined business operations and improved user experiences through automation
-      Skills: Generative AI Tools, Prompt Engineering, and more
     `,
     tech: [
       "Generative AI Tools",
@@ -109,7 +108,6 @@ const experiences: ExperienceData[] = [
       Contributed to business intelligence and analytics initiatives by building automated Power BI dashboards
       Developed data visualizations and generated analytical reports
       Leveraged data-driven insights to improve visibility into business performance, marketing effectiveness, and operational trends
-      Skills: Data Analytics, Presentation Skills, and more
     `,
     tech: ["Data Analytics", "Power BI", "Data Visualization", "Reporting"],
     metrics: [
@@ -131,7 +129,6 @@ const experiences: ExperienceData[] = [
       Developed and optimized CNN-based models for image classification tasks
       Explored Transformer architectures and reinforcement learning techniques
       Conducted experiments to improve model performance, training efficiency, and convergence behavior
-      Skills: Artificial Intelligence (AI) and Data Science
     `,
     tech: ["Artificial Intelligence", "Data Science", "Deep Learning", "Computer Vision"],
     metrics: [
@@ -152,7 +149,6 @@ const experiences: ExperienceData[] = [
       Applied data analysis, machine learning, and statistical techniques to solve real-world problems
       Gained hands-on experience in data preprocessing, exploratory data analysis, model development, and performance evaluation
       Worked on practical datasets and industry-oriented projects
-      Skills: Data Analytics, Data Science, and more
     `,
     tech: ["Data Analytics", "Data Science", "Machine Learning", "Statistics"],
     metrics: [
