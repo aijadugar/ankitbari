@@ -24,21 +24,23 @@ const experiences: ExperienceData[] = [
     role: "Founder",
     type: "Self-employed",
     dates: "Jun 2026 - Present",
-    location: "4 mos",
+    location: "Remote",
     src: "/placeholder.png",
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      The fastest, best-curated, agent-agnostic directory of AI skills (SKILL.md)
-      Preview, install, and ship them to Claude, ChatGPT, Cursor, Gemini CLI, and more
+      A fast, searchable, agent-agnostic directory of portable AI skills (SKILL.md) and plugins.
+      Ships as a website, docs site, dual-distribution CLI (npm + PyPI), and an MCP server so any skill is one command away from Claude Code, Cursor, Windsurf, Gemini CLI, Codex, ChatGPT, and Claude Desktop.
     `,
     tech: [
-      "AI Skills",
-      "Agent-Agnostic",
-      "Claude",
-      "ChatGPT",
-      "Cursor",
-      "Gemini CLI",
+      "Next.js",
+      "TypeScript",
+      "MCP",
+      "Node.js",
+      "Python",
+      "CLI Tooling",
+      "Monorepo",
+      "Docs",
     ],
     metrics: [
       { label: "Duration", value: "4 mos" },
@@ -50,16 +52,23 @@ const experiences: ExperienceData[] = [
     role: "Founder",
     type: "Self-employed",
     dates: "Dec 2025 - May 2026",
-    location: "6 mos",
+    location: "Remote",
     src: "/placeholder.png",
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      Founder and lead maintainer of SiteVPN, an open-source privacy and security technology project
-      Building a secure AI VPN alongside temporary email and phone number utility offerings
-      Focus areas: Networking and Open-Source Software
+      Founder of SiteVPN, a privacy SaaS combining private browsing, disposable email, anonymous temporary phone numbers, AI-assisted privacy intelligence, subscriptions, and a Business developer API in one account.
+      Built as a Next.js App Router product with Prisma/PostgreSQL, NextAuth, Stripe subscriptions, Claude-powered AI features, and API-key protected REST endpoints for VPN, temp email, and temp number access.
     `,
-    tech: ["Networking", "Open-Source Software", "Privacy", "Security"],
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "Stripe",
+      "NextAuth",
+      "Claude API",
+    ],
     metrics: [
       { label: "Duration", value: "6 mos" },
       { label: "Period", value: "Dec 25 - May 26" },
@@ -75,13 +84,13 @@ const experiences: ExperienceData[] = [
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      Worked as an AI Research Intern, contributing to AI-driven products, backend services, and automation systems
-      Collaborated across teams to build intelligent lead-generation solutions, content creation platforms, and workflow automation tools
-      Streamlined business operations and improved user experiences through automation
+      Developed an AI chatbot for lead tracking, achieving 95% accurate user data capture.
+      Implemented a fintech authentication backend with low-latency (150-200 ms) request handling for 100+ daily users.
     `,
     tech: [
       "Generative AI Tools",
       "Prompt Engineering",
+      "CrewAI",
       "Backend",
       "Automation",
     ],
@@ -100,12 +109,10 @@ const experiences: ExperienceData[] = [
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      Contributed to business intelligence and analytics initiatives by building automated Power BI dashboards
-      Developed data visualizations and generated analytical reports
-      Leveraged data-driven insights to improve visibility into business performance, marketing effectiveness, and operational trends
-      Skills: Data Analytics, Presentation Skills, and more
+      Contributed to business intelligence and analytics initiatives by building interactive Power BI dashboards with dynamic filters and custom DAX measures to improve decision-making.
+      Developed data visualizations and generated analytical reports to enhance market analytics insights and dashboard presentation.
     `,
-    tech: ["Data Analytics", "Power BI", "Data Visualization", "Reporting"],
+    tech: ["Data Analytics", "Power BI", "Data Visualization", "Reporting", "DAX"],
     metrics: [
       { label: "Duration", value: "4 mos" },
       { label: "Mode", value: "Remote" },
@@ -121,13 +128,10 @@ const experiences: ExperienceData[] = [
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      Gained hands-on experience in deep learning, computer vision, and reinforcement learning
-      Developed and optimized CNN-based models for image classification tasks
-      Explored Transformer architectures and reinforcement learning techniques
-      Conducted experiments to improve model performance, training efficiency, and convergence behavior
-      Skills: Artificial Intelligence (AI) and Data Science
+      Gained hands-on experience in deep learning, computer vision, and reinforcement learning while exploring Transformer architectures and CNN-based models.
+      Developed and integrated a machine learning model into web applications, conducting experiments to improve model performance, training efficiency, and convergence behavior.
     `,
-    tech: ["Artificial Intelligence", "Data Science", "Deep Learning", "Computer Vision"],
+    tech: ["Artificial Intelligence", "Data Science", "Deep Learning", "Computer Vision", "NLP"],
     metrics: [
       { label: "Duration", value: "4 mos" },
       { label: "Mode", value: "Remote" },
@@ -143,12 +147,10 @@ const experiences: ExperienceData[] = [
     imageFit: "contain",
     imageZoom: 1,
     description: `
-      Applied data analysis, machine learning, and statistical techniques to solve real-world problems
-      Gained hands-on experience in data preprocessing, exploratory data analysis, model development, and performance evaluation
-      Worked on practical datasets and industry-oriented projects
-      Skills: Data Analytics, Data Science, and more
+      Applied data analysis, machine learning, and statistical techniques to solve real-world problems on practical datasets and industry-oriented projects.
+      Executed data preprocessing on 10,000+ data records using Python libraries, covering cleaning, transformation, and feature preparation.
     `,
-    tech: ["Data Analytics", "Data Science", "Machine Learning", "Statistics"],
+    tech: ["Data Analytics", "Data Science", "Machine Learning", "Statistics", "Python"],
     metrics: [
       { label: "Duration", value: "2 mos" },
       { label: "Mode", value: "Hybrid" },
