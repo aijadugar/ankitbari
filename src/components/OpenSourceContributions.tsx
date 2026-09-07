@@ -64,18 +64,6 @@ function formatNumber(n: number): string {
   return String(n);
 }
 
-function timeAgo(iso: string): string {
-  const then = new Date(iso).getTime();
-  const now = Date.now();
-  const diff = Math.max(0, now - then);
-  const days = Math.floor(diff / 86400000);
-  if (days <= 0) return "today";
-  if (days < 30) return `${days}d ago`;
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  return `${Math.floor(months / 12)}y ago`;
-}
-
 function StateBadge({ state }: { state: GHPR["state"] }) {
   const map = {
     MERGED: { label: "Merged", cls: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
@@ -150,7 +138,7 @@ export function OpenSourceContributions({ isFullPage = false }: { isFullPage?: b
         <div className="flex flex-col">
           <h2 className="text-[18px] font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
             <KeyBadge sectionId="opensource" shortcutKey="o" />
-            Latent Space Contributions
+            Open Source Contributions
           </h2>
           {/* <p className="text-[12px] text-zinc-500 dark:text-zinc-400 -mt-0.5">
             GitHub · Hugging Face · Kaggle
@@ -369,9 +357,6 @@ function GitHubSection({
                 {pr.title}
               </h3>
             </div>
-            <p className="text-[12px] text-zinc-500 dark:text-zinc-400 ml-4.5 pl-0.5 relative z-20">
-              {pr.repository} · {timeAgo(pr.createdAt)}
-            </p>
           </a>
         );
       })}
