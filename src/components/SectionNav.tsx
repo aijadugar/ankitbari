@@ -96,6 +96,41 @@ export function SectionNavProvider({ children }: { children: ReactNode }) {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (isTypingTarget(e.target)) return;
 
+      const sectionIds = SECTION_SHORTCUTS.map((s) => s.id);
+
+      // PageUp/PageDown step through sections instead of raw viewport scroll
+      if (e.key === "PageDown" || e.key === "PageUp") {
+        e.preventDefault();
+        const currentIdx = sectionIds.indexOf(activeSection ?? "");
+
+        if (e.key === "PageDown") {
+          if (currentIdx === -1) {
+            // Before the first section (hero) → go to the first one
+            const el = document.getElementById(sectionIds[0]);
+            el?.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else if (currentIdx >= sectionIds.length - 1) {
+            // Already on the last section → scroll to page bottom
+            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+          } else {
+            const el = document.getElementById(sectionIds[currentIdx + 1]);
+            el?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        } else {
+          if (currentIdx === -1) {
+            // Not on any section → go to the last one
+            const el = document.getElementById(sectionIds[sectionIds.length - 1]);
+            el?.scrollIntoView({ behavior: "smooth", block: "start" });
+          } else if (currentIdx === 0) {
+            // First section → back to the hero/top
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } else {
+            const el = document.getElementById(sectionIds[currentIdx - 1]);
+            el?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+        return;
+      }
+
       const key = e.key.toLowerCase();
       const match = SECTION_SHORTCUTS.find((s) => s.key === key);
       if (!match) return;
@@ -109,7 +144,7 @@ export function SectionNavProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [activeSection]);
 
   return (
     <SectionNavContext.Provider value={{ activeSection }}>
