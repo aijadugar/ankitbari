@@ -9,6 +9,7 @@ import {
   Clock,
 } from "lucide-react";
 import { BlogLikeButton } from "@/components/BlogLikeButton";
+
 import { CurrentTime } from "@/components/CurrentTime";
 import { FooterBackground } from "@/components/FooterBackground";
 import { RightNavbar } from "@/components/RightNavbar";
@@ -304,7 +305,6 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
                   {post.readingTime}
                 </span>
               )}
-              <BlogLikeButton slug={post.slug} initialLikes={post.claps} />
             </div>
           </header>
 

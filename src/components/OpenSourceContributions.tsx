@@ -146,14 +146,8 @@ export function OpenSourceContributions({ isFullPage = false }: { isFullPage?: b
         </div>
 
         {/* Toggle */}
-
-        {/* Horizontal line below heading */}
-        <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
-        <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
-        <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
-      </div>
         <div className="flex items-center gap-2 relative z-20 group mr-[8px]">
-          <div className="absolute -inset-[5px] border border-black/5 dark:border-white/5 rounded-[11px] pointer-events-none transition-colors duration-300 group-hover:border-black/10 dark:group-hover:border-white/10" />
+          <div className="absolute -inset-[5px] bg-white dark:bg-[#0b0e14] border border-black/5 dark:border-white/5 rounded-[11px] pointer-events-none transition-colors duration-300 group-hover:border-black/10 dark:group-hover:border-white/10" />
           <div className="relative grid grid-cols-3 p-1 bg-zinc-50 dark:bg-[#09090b] rounded-[6px] border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80 w-fit select-none">
             <div
               className={`absolute top-1 bottom-1 left-1 w-[calc((100%-8px)/3)] rounded-[4px] bg-white dark:bg-[#1e1e20] border border-zinc-200/50 dark:border-cyan-500/30 shadow-sm transition-transform duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] transform will-change-transform ${tab === "github" ? "translate-x-0" : tab === "huggingface" ? "translate-x-[100%]" : "translate-x-[200%]"
@@ -173,6 +167,12 @@ export function OpenSourceContributions({ isFullPage = false }: { isFullPage?: b
             ))}
           </div>
         </div>
+
+        {/* Horizontal line below heading */}
+        <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+        <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+        <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/40 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+      </div>
 
       <div className="relative pt-2 pb-2">
         <div
