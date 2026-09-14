@@ -8,7 +8,6 @@ import {
   Calendar,
   Clock,
 } from "lucide-react";
-import { BlogLikeButton } from "@/components/BlogLikeButton";
 
 import { CurrentTime } from "@/components/CurrentTime";
 import { FooterBackground } from "@/components/FooterBackground";

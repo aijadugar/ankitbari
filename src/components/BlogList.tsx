@@ -71,10 +71,10 @@ export function BlogList() {
                     <span>{blog.date}</span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 font-medium">
+                  {/* <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 font-medium">
                     <RealClapIcon className="w-3.5 h-3.5" />
                     <span>{blog.claps}</span>
-                  </div>
+                  </div> */}
 
                   {/* Vertical Divider */}
                   <div className="hidden sm:block w-[1px] h-3 bg-zinc-300 dark:bg-zinc-700" />
