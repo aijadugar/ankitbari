@@ -71,7 +71,7 @@ async function fetchGitHub(token: string): Promise<ContributionsData["github"]> 
     let cursor: string | null = null;
 
     do {
-      const res = await fetch("https://api.github.com/graphql", {
+      const res: Response = await fetch("https://api.github.com/graphql", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,9 +81,9 @@ async function fetchGitHub(token: string): Promise<ContributionsData["github"]> 
         next: { revalidate: 3600 },
       });
 
-      const data = await res.json();
-      const search = data?.data?.search;
-      const edges = search?.edges ?? [];
+      const data: any = await res.json();
+      const search: any = data?.data?.search;
+      const edges: any[] = search?.edges ?? [];
 
       for (const e of edges) {
         const n = e?.node;
@@ -105,8 +105,9 @@ async function fetchGitHub(token: string): Promise<ContributionsData["github"]> 
         });
       }
 
-      const pageInfo = search?.pageInfo ?? {};
-      cursor = pageInfo.hasNextPage ? pageInfo.endCursor : null;
+      const pageInfo: { hasNextPage?: boolean; endCursor?: string | null } =
+        search?.pageInfo ?? {};
+      cursor = pageInfo.hasNextPage ? pageInfo.endCursor ?? null : null;
     } while (cursor && prs.length < MAX_TOTAL);
 
     prs.sort(
