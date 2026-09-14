@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Download, ExternalLink, FileText } from "lucide-react";
 import { CurrentTime } from "@/components/CurrentTime";
 import { FooterBackground } from "@/components/FooterBackground";
+import ResumeContent from "@/components/ResumeContent";
 import SoftPillButton from "@/components/pixel-perfect/soft-pill-button";
 
 const resumePath = "/Ankit_Bari_Resume.pdf";
@@ -151,16 +151,8 @@ export default function ResumePage() {
           </div>
         </div>
 
-        <div className="relative aspect-[8.5/11] w-full overflow-hidden rounded-[6px] border border-black/10 bg-[#161b22] shadow-sm dark:border-white/10">
-          <Image
-            src="/placeholder.png"
-            alt="Ankit Bari resume"
-            fill
-            preload
-            sizes="(min-width: 768px) 40vw, 100vw"
-            quality={75}
-            className="object-contain"
-          />
+        <div className="relative py-6">
+          <ResumeContent />
         </div>
 
         <div className="relative mt-8">
