@@ -395,7 +395,7 @@ function HuggingFaceSection({
     datasets: datasets.length,
   };
 
-  let items: HFModel[] = [];
+  let items: Array<HFModel | HFSpace> = [];
   let kindLabel = "Space";
   let dotCls = "bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]";
   let badgeCls = "border-indigo-500/30 bg-indigo-500/10 text-indigo-300";
@@ -480,7 +480,7 @@ function HuggingFaceSection({
             </div>
             <div className="flex items-center gap-3 shrink-0 relative z-20 text-[11px] text-zinc-500 dark:text-zinc-400">
               {showDownloads && (
-                <span title="downloads">↓ {formatNumber(m.downloads)}</span>
+                <span title="downloads">↓ {formatNumber((m as HFModel).downloads)}</span>
               )}
               <span title="likes" className="text-rose-400">♥ {formatNumber(m.likes)}</span>
             </div>

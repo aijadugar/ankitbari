@@ -39,7 +39,7 @@ function DigitCell({ value }: { value: string }) {
 
 function TwoDots() {
   return (
-    <div className="mx-0.5 sm:mx-1 flex flex-col gap-1.5 -translate-x-[2px] sm:-translate-x-[3px]">
+    <div className="mx-0.5 sm:mx-1 h-full flex flex-col items-center justify-center gap-1.5 -translate-x-[2px] sm:-translate-x-[3px]">
       <div className="w-[2px] h-[2px] rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
       <div className="w-[2px] h-[2px] rounded-full bg-zinc-400 dark:bg-zinc-500"></div>
     </div>
@@ -73,7 +73,7 @@ export function CurrentTime() {
       aria-label={`Current time ${label}`}
     >
       <div
-        className="text-[20px] sm:text-[24px] tracking-[0.12em] flex items-center text-zinc-500 dark:text-zinc-400 h-full"
+        className="text-[20px] sm:text-[24px] tracking-[0.12em] flex items-center pl-[0.3em] text-zinc-500 dark:text-zinc-400 h-full"
         style={{ fontFamily: '"Doto", monospace', fontWeight: 700 }}
       >
         <DigitCell value={hours[0]} />
