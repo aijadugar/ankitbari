@@ -27,7 +27,7 @@ function DigitCell({ value }: { value: string }) {
         {ROLL.map((d) => (
           <span
             key={d}
-            className="flex h-[1.18em] items-center justify-center leading-none"
+            className="flex h-[1.18em] items-center justify-center pl-[0.3em] leading-none"
           >
             {d}
           </span>
