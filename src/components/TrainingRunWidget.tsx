@@ -11,6 +11,10 @@ import { useEffect, useRef } from "react";
  * elapsed real time, so it can run indefinitely without ever repeating
  * the same trace.
  *
+ * The simulation state lives at module scope and is pre-warmed on first
+ * use, so route changes that unmount/remount this component resume the
+ * same evolved curves instead of collapsing to flat, overlapping lines.
+ *
  * Fully responsive: the canvas measures its parent and redraws on resize,
  * and every drawn coordinate is derived from the current width/height so it
  * reads correctly whether it's dropped into a small avatar square or a
@@ -34,32 +38,72 @@ interface Series {
   history: number[];
 }
 
+const MAX_POINTS = 96;
+const PREWARM_STEPS = 320; // fast-forward so curves are already "trained"
+
+interface SimState {
+  t: number;
+  train: Series;
+  val: Series;
+}
+
+// Module-level singleton: survives remounts (route changes / view transitions)
+let sim: SimState | null = null;
+
+function getSim(): SimState {
+  if (sim) return sim;
+
+  const fresh = (floor: number, start: number, tau: number, theta: number, sigma: number): Series => ({
+    value: start,
+    ou: 0,
+    floor,
+    start,
+    tau,
+    theta,
+    sigma,
+    history: [],
+  });
+
+  const s: SimState = {
+    t: 0,
+    train: fresh(0.08, 1, 260, 0.08, 0.006),
+    val: fresh(0.16, 1.05, 300, 0.05, 0.014),
+  };
+
+  // Seed full history and pre-warm the decay: without this, a (re)mount
+  // shows 96 identical points → two straight, overlapping lines with the
+  // endpoint dots marching in perfect parallel until the noise diverges.
+  s.train.history.push(...Array(MAX_POINTS).fill(s.train.start));
+  s.val.history.push(...Array(MAX_POINTS).fill(s.val.start));
+
+  const gauss = () => {
+    // Box-Muller
+    const u1 = Math.max(Math.random(), 1e-6);
+    const u2 = Math.random();
+    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  };
+
+  const advance = (series: Series, tGlobal: number) => {
+    const decay = series.floor + (series.start - series.floor) * Math.exp(-tGlobal / series.tau);
+    series.ou += -series.theta * series.ou + series.sigma * gauss();
+    const next = Math.max(0.02, decay + series.ou);
+    series.value = next;
+    series.history.push(next);
+    if (series.history.length > MAX_POINTS) series.history.shift();
+  };
+
+  for (let i = 0; i < PREWARM_STEPS; i++) {
+    s.t += 1;
+    advance(s.train, s.t);
+    advance(s.val, s.t);
+  }
+
+  sim = s;
+  return s;
+}
+
 export default function TrainingRunWidget({ className = "" }: TrainingRunWidgetProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const stateRef = useRef({
-    t: 0,
-    train: {
-      value: 1,
-      ou: 0,
-      floor: 0.08,
-      start: 1,
-      tau: 260,
-      theta: 0.08,
-      sigma: 0.006,
-      history: [] as number[],
-    } as Series,
-    val: {
-      value: 1,
-      ou: 0,
-      floor: 0.16,
-      start: 1.05,
-      tau: 300,
-      theta: 0.05,
-      sigma: 0.014,
-      history: [] as number[],
-    } as Series,
-  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -68,7 +112,7 @@ export default function TrainingRunWidget({ className = "" }: TrainingRunWidgetP
     if (!ctx) return;
 
     const dims = { w: 220, h: 120 };
-    const maxPoints = 96;
+    const maxPoints = MAX_POINTS;
 
     const measure = () => {
       const parent = canvas.parentElement;
@@ -79,15 +123,8 @@ export default function TrainingRunWidget({ className = "" }: TrainingRunWidgetP
     };
     measure();
 
-    const s = stateRef.current;
-
-    const seed = (series: Series) => {
-      for (let i = 0; i < maxPoints; i++) {
-        series.history.push(series.start);
-      }
-    };
-    seed(s.train);
-    seed(s.val);
+    // Resume the shared simulation exactly where it left off
+    const s = getSim();
 
     const gauss = () => {
       // Box-Muller
