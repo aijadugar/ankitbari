@@ -191,4 +191,53 @@ body {
     animation-play-state: paused;
   }
 
+  /* Marching dotted lines — dots slowly slide along every divider.
+     Targets all inline repeating-linear-gradient masks portfolio-wide. */
+  @keyframes dash-slide-h {
+    to { -webkit-mask-position: -6px 0; mask-position: -6px 0; }
+  }
+  @keyframes dash-slide-v {
+    to { -webkit-mask-position: 0 -6px; mask-position: 0 -6px; }
+  }
+
+  [style*="repeating-linear-gradient(to right"] {
+    -webkit-mask-image: linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px) !important;
+    mask-image: linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px) !important;
+    -webkit-mask-size: 6px 100%;
+    mask-size: 6px 100%;
+    -webkit-mask-repeat: repeat-x;
+    mask-repeat: repeat-x;
+    animation: dash-slide-h 3s linear infinite;
+  }
+
+  [style*="repeating-linear-gradient(to bottom"] {
+    -webkit-mask-image: linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px) !important;
+    mask-image: linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px) !important;
+    -webkit-mask-size: 100% 6px;
+    mask-size: 100% 6px;
+    -webkit-mask-repeat: repeat-y;
+    mask-repeat: repeat-y;
+    animation: dash-slide-v 3s linear infinite;
+  }
+
+  /* Same treatment for the ::after dashed dividers (metric card separators) */
+  [class*="to_bottom"]::after,
+  [class*="to_bottom"]::before {
+    -webkit-mask-image: linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px) !important;
+    mask-image: linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px) !important;
+    -webkit-mask-size: 100% 6px;
+    mask-size: 100% 6px;
+    -webkit-mask-repeat: repeat-y;
+    mask-repeat: repeat-y;
+    animation: dash-slide-v 3s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [style*="repeating-linear-gradient"],
+    [class*="to_bottom"]::after,
+    [class*="to_bottom"]::before {
+      animation: none;
+    }
+  }
+
 }
