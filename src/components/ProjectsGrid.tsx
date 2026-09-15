@@ -64,7 +64,7 @@ export const ProjectCard = ({
         <motion.div
           className="absolute bottom-0 left-1/2 w-[85%] rounded-t-[10px] bg-white dark:bg-[#0a0a0a] p-0 shadow-[0_-8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.5)] z-20 border border-black/5 dark:border-white/[0.15] border-b-0"
         >
-          <div className="size-full overflow-hidden rounded-t-[9px]">
+          <div className="w-full aspect-video overflow-hidden rounded-t-[9px]">
             <Image
               src={imageSrc}
               alt={`${project.title} preview`}
@@ -73,7 +73,7 @@ export const ProjectCard = ({
               preload={isPriority}
               sizes="(min-width: 768px) 17vw, calc(100vw - 2rem)"
               quality={70}
-              className="size-full object-cover"
+              className="size-full object-cover object-top"
             />
           </div>
         </motion.div>
