@@ -190,8 +190,8 @@ export default function TrainingRunWidget({ className = "" }: TrainingRunWidgetP
       // --- header ---
       ctx.font = `${fontBig}px "Courier Prime", "Courier New", monospace`;
       ctx.fillStyle = "#f0fdf4";
-      ctx.fillText("my focus", padX-20, headerH * 0.55);
-      ctx.fillText("is on training", padX-20, headerH * 0.98);
+      ctx.fillText("focusing", padX-20, headerH * 0.55);
+      ctx.fillText("on training", padX-20, headerH * 0.98);
 
       // --- grid ---
       ctx.strokeStyle = "rgba(240, 253, 244, 0.08)";
