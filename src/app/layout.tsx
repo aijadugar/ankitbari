@@ -24,9 +24,9 @@ export const metadata: Metadata = {
     "AI and Research Engineer building model architectures and mathematics with CUDA kernels.",
   icons: {
     icon: [
-      { url: "/placeholder.png", sizes: "any" },
+      { url: "/a.png", type: "image/png", sizes: "32x32" },
     ],
-    apple: [{ url: "/placeholder.png", type: "image/png", sizes: "180x180" }],
+    apple: [{ url: "/a.png", type: "image/png", sizes: "180x180" }],
   },
   openGraph: {
     title: "Ankit Bari",
