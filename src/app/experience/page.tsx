@@ -13,10 +13,7 @@ type ExperienceData = {
   role: string;
   dates: string;
   location: string;
-  src: string;
   type?: string;
-  imageFit?: "contain" | "cover";
-  imageZoom?: number;
   description: string;
   tech: string[];
   metrics?: { label: string; value: string }[];
@@ -30,9 +27,6 @@ const experiences: ExperienceData[] = [
     type: "Self-employed",
     dates: "Jun 2026 - Present",
     location: "Remote",
-    src: "/placeholder.png",
-    imageFit: "contain",
-    imageZoom: 1,
     description: `
       A fast, searchable, agent-agnostic directory of portable AI skills (SKILL.md) and plugins.
       Ships as a website, docs site, dual-distribution CLI (npm + PyPI), and an MCP server so any skill is one command away from Claude Code, Cursor, Windsurf, Gemini CLI, Codex, ChatGPT, and Claude Desktop.
@@ -59,9 +53,6 @@ const experiences: ExperienceData[] = [
     type: "Self-employed",
     dates: "Dec 2025 - May 2026",
     location: "Remote",
-    src: "/placeholder.png",
-    imageFit: "contain",
-    imageZoom: 1,
     description: `
       Founder of SiteVPN, a privacy SaaS combining private browsing, disposable email, anonymous temporary phone numbers, AI-assisted privacy intelligence, subscriptions, and a Business developer API in one account.
       Built as a Next.js App Router product with Prisma/PostgreSQL, NextAuth, Stripe subscriptions, Claude-powered AI features, and API-key protected REST endpoints for VPN, temp email, and temp number access.
@@ -87,9 +78,6 @@ const experiences: ExperienceData[] = [
     type: "Internship",
     dates: "Jun 2025 - Nov 2025",
     location: "Mumbai, Maharashtra, India · On-site",
-    src: "/placeholder.png",
-    imageFit: "contain",
-    imageZoom: 1,
     description: `
       Developed an AI chatbot for lead tracking, achieving 95% accurate user data capture.
       Implemented a fintech authentication backend with low-latency (150-200 ms) request handling for 100+ daily users.
@@ -113,9 +101,6 @@ const experiences: ExperienceData[] = [
     type: "Internship",
     dates: "Oct 2024 - Jan 2025",
     location: "Mumbai, Maharashtra, India · Remote",
-    src: "/placeholder.png",
-    imageFit: "contain",
-    imageZoom: 1,
     description: `
       Contributed to business intelligence and analytics initiatives by building interactive Power BI dashboards with dynamic filters and custom DAX measures to improve decision-making.
       Developed data visualizations and generated analytical reports to enhance market analytics insights and dashboard presentation.
@@ -133,9 +118,6 @@ const experiences: ExperienceData[] = [
     type: "Internship",
     dates: "Jul 2024 - Oct 2024",
     location: "Mumbai, Maharashtra, India · Remote",
-    src: "/placeholder.png",
-    imageFit: "contain",
-    imageZoom: 1,
     description: `
       Gained hands-on experience in deep learning, computer vision, and reinforcement learning while exploring Transformer architectures and CNN-based models.
       Developed and integrated a machine learning model into web applications, conducting experiments to improve model performance, training efficiency, and convergence behavior.
@@ -153,9 +135,6 @@ const experiences: ExperienceData[] = [
     type: "Part-time",
     dates: "Dec 2023 - Jan 2024",
     location: "Mumbai, Maharashtra, India · Hybrid",
-    src: "/placeholder.png",
-    imageFit: "contain",
-    imageZoom: 1,
     description: `
       Applied data analysis, machine learning, and statistical techniques to solve real-world problems on practical datasets and industry-oriented projects.
       Executed data preprocessing on 10,000+ data records using Python libraries, covering cleaning, transformation, and feature preparation.
@@ -270,48 +249,32 @@ export default function AllExperiencePage() {
                   )}
 
                   <div
-                    className="flex flex-col items-start gap-2.5 py-3.5 px-4 -mx-4 hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors cursor-pointer relative z-20 rounded-lg sm:gap-3 sm:py-4 2xl:flex-row 2xl:items-center 2xl:justify-between"
+                    className="flex items-start justify-between gap-4 py-3.5 px-4 -mx-4 hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors cursor-pointer relative z-20 rounded-lg sm:py-4"
                     onClick={() => setOpenIdx(isOpen ? null : idx)}
                   >
-                    <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
-                      <div className="size-10 shrink-0 rounded-[10px] border border-black/10 bg-zinc-50 p-[2px] shadow-sm shadow-black/15 dark:border-zinc-800 dark:bg-[#111111] dark:shadow-md dark:shadow-black/50">
-                        <div className="w-full h-full rounded-[7px] border border-black/5 dark:border-black/20 bg-[#161b22] flex items-center justify-center overflow-hidden relative">
-                          <Image
-                            src={item.src}
-                            alt={item.title}
-                            width={40}
-                            height={40}
-                            sizes="40px"
-                            quality={60}
-                            style={item.imageZoom ? { transform: `scale(${item.imageZoom})` } : undefined}
-                            className={`${item.imageFit === "contain" ? "object-contain" : "object-cover"} w-full h-full p-0.5`}
-                          />
-                        </div>
-                      </div>
-                      <div className="flex min-w-0 flex-col gap-0.5 pr-2 sm:pr-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-[14px] font-bold leading-tight text-zinc-900 dark:text-zinc-100 sm:text-[17px]">
-                            {item.title}
-                          </span>
-                          {item.type && (
-                            <span className="self-center whitespace-nowrap px-1.5 py-[1px] rounded-[4px] text-[11px] font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-200/50 dark:bg-zinc-800/50 border border-zinc-300/50 dark:border-zinc-700/50">
-                              {item.type}
-                            </span>
-                          )}
-                        </div>
-                        <span
-                          className={`text-[14px] text-zinc-600 dark:text-zinc-400 sm:text-[15px]`}
-                        >
-                          {item.role}
+                    <div className="flex flex-col gap-0.5 min-w-0 flex-1 pr-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[14px] font-bold leading-tight text-zinc-900 dark:text-zinc-100 sm:text-[17px]">
+                          {item.title}
                         </span>
+                        {item.type && (
+                          <span className="whitespace-nowrap px-1.5 py-[1px] rounded-[4px] text-[11px] font-medium text-zinc-600 dark:text-zinc-400 bg-zinc-200/50 dark:bg-zinc-800/50 border border-zinc-300/50 dark:border-zinc-700/50">
+                            {item.type}
+                          </span>
+                        )}
                       </div>
+                      <span
+                        className={`text-[14px] text-zinc-600 dark:text-zinc-400 sm:text-[15px] truncate`}
+                      >
+                        {item.role}
+                      </span>
                     </div>
-                    <div className="flex shrink-0 flex-col items-start gap-0.5 pr-5 pl-[52px] text-left sm:pl-[56px] 2xl:items-end 2xl:pl-0 2xl:text-right">
-                      <div className="relative flex items-center text-[13px] font-medium text-zinc-900 dark:text-zinc-100 sm:text-[14px]">
+                    <div className="flex flex-col items-end gap-0.5 text-right shrink-0">
+                      <div className="flex items-center text-[13px] sm:text-[14px] font-medium text-zinc-900 dark:text-zinc-100 relative pr-5">
                         <span>{item.dates}</span>
                         <svg
                           viewBox="0 0 24 24"
-                          className={`w-3.5 h-3.5 text-zinc-500 absolute -right-5 top-1/2 -translate-y-1/2 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                          className={`w-3.5 h-3.5 text-zinc-500 absolute right-0 top-1/2 -translate-y-1/2 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
                             }`}
                           fill="none"
                           stroke="currentColor"
