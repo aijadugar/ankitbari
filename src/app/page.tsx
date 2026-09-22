@@ -8,8 +8,6 @@ import { KeyBadge } from "@/components/SectionNav";
 import { RightNavbar } from "@/components/RightNavbar";
 import Link from "next/link";
 import SoftPillButton from "@/components/pixel-perfect/soft-pill-button";
-import SocialHoverCard from "@/components/pixel-perfect/social-hover-card";
-import { BannerParticles } from "@/components/BannerParticles";
 import { FileText } from "lucide-react";
 import Image from "next/image";
 import TrainingRunWidget from "@/components/TrainingRunWidget";
