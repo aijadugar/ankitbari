@@ -50,12 +50,12 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Blog | Ashutoshx7",
+      title: "Blog | Ankit Bari",
     };
   }
 
   return {
-    title: `${post.title} | Ashutoshx7`,
+    title: `${post.title} | Ankit Bari`,
     description: post.description,
     openGraph: {
       title: post.title,
