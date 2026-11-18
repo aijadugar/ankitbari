@@ -1,300 +1,470 @@
-import React from "react";
+import { CurrentTime } from "@/components/CurrentTime";
+import { ProjectsGrid } from "@/components/ProjectsGrid";
+import { ExperienceList } from "@/components/ExperienceList";
+import { OpenSourceContributions } from "@/components/OpenSourceContributions";
+import { BlogList } from "@/components/BlogList";
+import { FooterBackground } from "@/components/FooterBackground";
+import { KeyBadge } from "@/components/SectionNav";
+import { RightNavbar } from "@/components/RightNavbar";
+import Link from "next/link";
+import SoftPillButton from "@/components/pixel-perfect/soft-pill-button";
+import { FileText } from "lucide-react";
+import Image from "next/image";
+import TrainingRunWidget from "@/components/TrainingRunWidget";
 
-// ---- Data -------------------------------------------------------------
-
-const contact = {
-  name: "Ankit Bari",
-  tagline: "AI engineer and founder | shipping open-source and building SkyBoy",
-  email: "bariankitvinod@gmail.com",
-  website: { label: "ankitbari.vercel.app", url: "https://ankitbari.vercel.app" },
-  linkedin: { label: "linkedin.com/in/aijadugar", url: "https://www.linkedin.com/in/aijadugar/" },
-  github: { label: "github.com/aijadugar", url: "https://github.com/aijadugar" },
-};
-
-const education = [
+const skillGroups = [
   {
-    degree: "Bachelor of Technology in Artificial Intelligence and Data Science",
-    dates: "2023 – 2026",
-    school: "Vidyavardhini's College of Engineering and Technology, Mumbai University",
-    detail: "CGPA: 9.10 / 10.0",
-  },
-  {
-    degree: "Diploma in Computer Engineering",
-    dates: "2021 – 2023",
-    school: "Theem College of Engineering, MSBTE",
-    detail: "Percentage: 85.3%",
-  },
-];
-
-const experience = [
-  {
-    role: "Founder",
-    dates: "Mar 2026 – Present",
-    org: "SkyBoy",
-    location: "Mumbai, India",
-    bullets: [
-      "Building a cross-platform desktop product for developer tools and workflow automation, built for the shift to AI-assisted (\"vibe\") coding and agentic software development.",
-      "Developing it for Claude Code and Codex as a second autonomous brain that works alongside coding agents: it tracks their progress, alerts you, and keeps long tasks moving by sending the next prompt on its own.",
-      "Defining product vision, roadmap and go-to-market for engineers using Claude Code, Codex and other AI coding agents; leading design, competitive research and the product website.",
+    title: "Languages & Frameworks",
+    items: [
+      "React",
+      "Node.js",
+      "Python",
+      "CUDA",
+      "SQL",
+      "Bash",
+      "Express.js",
+      "FastAPI",
+      "Flask",
+      "AI Agents",
     ],
   },
   {
-    role: "AI Research Intern",
-    dates: "Jun 2025 – Nov 2025",
-    org: "The SMM Hub",
-    location: "Mumbai, India",
-    bullets: [
-      "Built an AI chatbot for lead tracking and evaluated it against conversation datasets, achieving 95% accuracy in user data capture.",
-      "Researched, built and load-tested a fintech authentication backend, then deployed it to serve 100+ daily users with 150–200 ms request latency.",
-      "Solved a client's content bottleneck by designing a multi-agent system in CrewAI, where specialized LLM agents (research, drafting, editing, image generation) automate blog production from topic to publish-ready post.",
-    ],
-  },
-];
-
-const projects = [
-  {
-    name: "Know-When-You-Don't-Know: Hallucination Detection for LLMs",
-    tag: "Live | Code",
-    stack:
-      "PyTorch · Transformers · Qwen2.5-3B-Instruct · scikit-learn · Gradio · Hugging Face Spaces (ZeroGPU)",
-    bullets: [
-      "Built an LLM reliability system that predicts, before generation, whether a model's answer to a factual question will be wrong, using a linear probe on the last-prompt-token hidden state of Qwen2.5-3B-Instruct, and abstains instead of hallucinating.",
-      "Developed an end-to-end reproducible pipeline (data build, answer labeling, activation extraction, probe training, out-of-distribution evaluation) trained on TriviaQA and tested on NQ-Open, with unit tests, a claims-audit script and a deployed Gradio app.",
-    ],
-  },
-  {
-    name: "Satbara Saathi: Land-Record Explainer",
-    tag: "Live | Code",
-    stack: "Python · OCR · LLMs · Text-to-Speech · Docker · GitHub Actions · Render",
-    bullets: [
-      "Built a multilingual (Marathi, Hindi, English) AI tool that reads scanned Maharashtra 7/12 land records and explains them in plain language, with spoken summaries, for farmers and landowners.",
-      "Designed a pipeline of OCR, structured extraction, validation and a deterministic red-flag rules engine with no AI in the decision logic, using the LLM only to explain findings; added consent gating, deletion of images after processing and PII-free logs.",
-    ],
-  },
-  {
-    name: "Fermes",
-    tag: "Live | Code",
-    stack:
-      "Node.js · Express · Next.js · Sarvam AI · LiveKit · Google Places API · Supabase (OAuth) · Redis · Docker",
-    bullets: [
-      "Engineered an AI land-suitability agent, orchestrating Sarvam's LLM with tool-calling over cited geospatial data (elevation, flood zone, soil) and Google Places for nearby suppliers.",
-      "Delivered a derived-verdict site report grounding LLM output in factual sources (USGS, FEMA, USDA) instead of raw model opinion, to reduce hallucination risk in high-stakes farming decisions.",
+    title: "Libraries",
+    items: [
+      "numpy",
+      "pandas",
+      "scikit-learn",
+      "huggingface",
+      "pytorch",
+      "helion",
+      "torchtitan",
+      "ao",
+      "executorch",
+      "transformers",
+      "peft",
+      "accelerate",
+      "kernels",
+      "optimum",
     ],
   },
 ];
 
-const openSource = [
-  {
-    name: "Nuphos",
-    text: "Merged 30+ pull requests across the desktop, backend and agent-runtime layers of a platform that runs Claude Code and Codex agents. Hardened security and reliability: IP-based rate limiting on password sign-in. Fixed a session-loss bug where flaky session loads wiped an agent's saved context; the change was merged with praise from the maintainer.",
-  },
-  {
-    name: "Heard",
-    text: "(PR under review) Windows support for the headless core (daemon, CLI, hooks, audio) and a fix for failures when the cloud voice is unavailable.",
-  },
-  {
-    name: "HydraDB CLI",
-    text: "(PR under review) fixes for CLI input handling, config security and API response validation.",
-  },
-  {
-    name: "Monid",
-    text: "(PR under review) engine fix preventing URL path parameters from escaping their path segment.",
-  },
-  {
-    name: "BasedosDados SDK",
-    text: "Added a GCP Console link to copy_table success logs to speed up debugging of data pipelines.",
-  },
-];
-
-const skills = [
-  { label: "Programming Languages", value: "Python, C++, CUDA, SQL, Bash" },
-  {
-    label: "Machine Learning & Deep Learning",
-    value:
-      "PyTorch, Hugging Face Transformers, Parameter-Efficient Fine-Tuning (PEFT), Model Evaluation & Benchmarking, Multimodal and Multilingual AI, GPU Optimization",
-  },
-  {
-    label: "LLM & Agentic AI",
-    value:
-      "Retrieval-Augmented Generation (RAG), Model Context Protocol (MCP), Multi-Agent Systems, LLM APIs, LLM Evaluation",
-  },
-  { label: "Backend & Frameworks", value: "FastAPI, Flask, Express.js, Next.js, React.js" },
-  { label: "Databases", value: "MongoDB, Redis, Chroma DB (vector database)" },
-  { label: "Tools & DevOps", value: "Git, GitHub, Docker, CI/CD, Cloud Deployment, Jupyter" },
-];
-
-const achievements = [
-  "Ranked 1st in the Department of Artificial Intelligence & Data Science",
-  "2nd Place at VNPS'25 – National-Level Project Showcase, VCET Mumbai",
-  "Open-sourced models on Hugging Face Hub, with 100k+ downloads across Neural Networks, LLMs, ASR, translation, and vision architectures",
-  "Launched aynlp, an open-source NLP utility library with 7k+ downloads, enabling developers to solve common NLP tasks efficiently",
-  "Authored 3+ technical articles on AI Agents and Reinforcement Learning in VCET Techzette",
-  "Kaggle competitor with 15+ badges across Notebooks and Competitions, applying data science and ML techniques to real-world problems",
-  "Solved 350+ DSA problems across competitive coding platforms",
-];
-
-// ---- Small building blocks ---------------------------------------------
-
-function SectionHeading({ children }: { children: React.ReactNode }) {
+export default function Home() {
   return (
-    <h2 className="text-[13px] font-bold tracking-wide text-gray-900 border-b border-gray-300 pb-1 mb-2.5">
-      {children}
-    </h2>
-  );
-}
+    <div className="min-h-screen w-full bg-white dark:bg-[#0b0e14] relative overflow-x-hidden transition-colors duration-300">
 
-function Bullets({ items }: { items: string[] }) {
-  return (
-    <ul className="mt-1 space-y-1">
-      {items.map((b, i) => (
-        <li key={i} className="flex text-[12.5px] leading-snug text-gray-800">
-          <span className="mr-2 select-none">•</span>
-          <span>{b}</span>
-        </li>
+      {/* Right Side Blueprint Navigation */}
+      <RightNavbar />
+
+      {/* Vertical Lines - Ultra-fine Micro Dots */}
+      <div className="absolute top-0 bottom-0 left-[30%] w-0 border-r border-black/30 dark:border-[#2a303c] pointer-events-none hidden md:block" style={{ maskImage: 'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+      <div className="absolute top-0 bottom-0 right-[30%] w-0 border-r border-black/30 dark:border-[#2a303c] pointer-events-none hidden md:block" style={{ maskImage: 'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+
+      {/* Horizontal Lines - Ultra-fine Micro Dots */}
+      <div className="absolute left-0 right-0 top-[22vh] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+      <div className="absolute left-0 right-0 top-[calc(22vh+112px)] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+
+      {/* Ultra-Tiny Solid Nodes */}
+      {[
+        { top: '22vh', left: '30%' },
+        { top: '22vh', right: '30%' },
+        { top: 'calc(22vh + 112px)', left: '30%' },
+        { top: 'calc(22vh + 112px)', right: '30%' },
+      ].map((pos, i) => (
+        <div key={i} className="absolute w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] pointer-events-none z-10 hidden md:block"
+          style={{
+            top: pos.top,
+            left: pos.left,
+            right: pos.right,
+            transform: `translate(${pos.right ? '50%' : '-50%'}, -50%)`
+          }} />
       ))}
-    </ul>
-  );
-}
 
-function NamedBullets({ items }: { items: { name: string; text: string }[] }) {
-  return (
-    <ul className="mt-1 space-y-1">
-      {items.map((b, i) => (
-        <li key={i} className="flex text-[12.5px] leading-snug text-gray-800">
-          <span className="mr-2 select-none">•</span>
-          <span>
-            <span className="font-semibold">{b.name}: </span>
-            {b.text}
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
+      {/* Cell 1: Banner */}
+      <div className="absolute left-0 right-0 md:left-[30%] md:right-[30%] top-0 h-[22vh] -z-0 pointer-events-auto overflow-hidden bg-white dark:bg-[#0b0e14] shadow-[0_4px_12px_rgba(2,6,23,0.04)] dark:shadow-[0_4px_12px_rgba(2,6,23,0.10)]">
+        {/* <Image
+          src="/placeholder.png"
+          alt=""
+          fill
+          fetchPriority="high"
+          sizes="(min-width: 768px) 40vw, 100vw"
+          quality={100}
+          className="object-cover object-center dark:hidden"
+        /> */}
+        {/* <Image
+          src="/placeholder.png"
+          alt=""
+          fill
+          fetchPriority="high"
+          sizes="(min-width: 768px) 40vw, 100vw"
+          quality={100}
+          className="hidden object-cover object-center dark:block"
+        /> */}
+        {/* <BannerParticles /> */}
+        <div className="absolute inset-x-0 bottom-0 h-10 pointer-events-none z-[5] bg-gradient-to-t from-white/90 to-transparent dark:from-[#0b0e14]/70 dark:to-transparent" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none z-20 bg-gradient-to-r from-white/90 to-transparent dark:from-[#0b0e14]/50 dark:to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none z-20 bg-gradient-to-l from-white/90 to-transparent dark:from-[#0b0e14]/50 dark:to-transparent" />
+        <div className="absolute bottom-3 left-4 z-10 pointer-events-auto">
+          <CurrentTime />
+        </div>
+        <TrainingRunWidget className="bottom-3 right-2 w-[220px] h-[120px] z-30 pointer-events-none" />
+      </div>
 
-// ---- Main component -----------------------------------------------------
+      {/* Cell 2: Profile Section - 112px height to wrap the framed image (13px gap top/bottom) */}
+      <div className="absolute left-0 right-0 md:left-[30%] md:right-[30%] top-[22vh] h-[112px] flex items-center px-4 z-50">
+        <div className="flex w-full items-center justify-between">
 
-export default function ResumeContent() {
-  return (
-    <div className="w-full font-sans">
-      <div className="mx-auto max-w-[820px] rounded-[6px] bg-white text-gray-900 shadow-sm ring-1 ring-black/10 dark:ring-white/10 px-6 py-8 sm:px-10 sm:py-9">
-        {/* Header */}
-        <header className="text-center mb-5">
-          <h1 className="text-[26px] font-bold tracking-tight">{contact.name}</h1>
-          <p className="mt-1 text-[12.5px] italic text-gray-700">{contact.tagline}</p>
-          <p className="mt-1 text-[12.5px] text-gray-700">
-            {contact.email} |{" "}
-            <a
-              href={contact.website.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-700 underline hover:text-gray-900"
-            >
-              {contact.website.label}
-            </a>{" "}
-            |{" "}
-            <a
-              href={contact.linkedin.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-700 underline hover:text-gray-900"
-            >
-              {contact.linkedin.label}
-            </a>{" "}
-            |{" "}
-            <a
-              href={contact.github.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-700 underline hover:text-gray-900"
-            >
-              {contact.github.label}
-            </a>
-          </p>
-        </header>
-
-        {/* Education */}
-        <section className="mb-4">
-          <SectionHeading>Education</SectionHeading>
-          <div className="space-y-2.5">
-            {education.map((ed, i) => (
-              <div key={i}>
-                <div className="flex justify-between items-baseline text-[13px]">
-                  <span className="font-semibold">{ed.degree}</span>
-                  <span className="text-gray-700 text-[12.5px] whitespace-nowrap ml-4">{ed.dates}</span>
-                </div>
-                <div className="flex justify-between items-baseline text-[12.5px] text-gray-700 italic">
-                  <span>{ed.school}</span>
-                  <span className="whitespace-nowrap ml-4">{ed.detail}</span>
-                </div>
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="relative p-[3px] rounded-[6px] sm:rounded-[8px] border-[1.5px] border-black/30 dark:border-white/[0.15] shrink-0">
+              {/* The inner image */}
+              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-[3px] sm:rounded-[5px] overflow-hidden bg-zinc-100 dark:bg-zinc-900">
+                <Image
+                  src="/me.png"
+                  alt="Profile"
+                  width={240}
+                  height={240}
+                  quality={90}
+                  priority
+                  fetchPriority="high"
+                  sizes="(min-width: 640px) 120px, 96px"
+                  className="h-full w-full origin-center translate-y-1 scale-[1.1] object-cover opacity-90 grayscale contrast-100 mix-blend-multiply dark:mix-blend-normal"
+                />
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
 
-        {/* Work Experience */}
-        <section className="mb-4">
-          <SectionHeading>Work Experience</SectionHeading>
-          <div className="space-y-3">
-            {experience.map((job, i) => (
-              <div key={i}>
-                <div className="flex justify-between items-baseline text-[13px]">
-                  <span className="font-semibold">{job.role}</span>
-                  <span className="text-gray-700 text-[12.5px] whitespace-nowrap ml-4">{job.dates}</span>
-                </div>
-                <div className="flex justify-between items-baseline text-[12.5px] text-gray-700 italic">
-                  <span>
-                    {job.org} · {job.location}
-                  </span>
-                </div>
-                <Bullets items={job.bullets} />
-              </div>
-            ))}
+            <div className="flex flex-col justify-center pt-8">
+              <h1 className="text-[20px] sm:text-[24px] font-bold text-zinc-800 dark:text-zinc-100 tracking-tight leading-none mb-0.5 [text-shadow:-1.5px_0_0_rgba(0,200,255,0.3),1.5px_0_0_rgba(255,80,0,0.3)] dark:[text-shadow:-1.5px_0_0_rgba(79,70,229,0.6),1.5px_0_0_rgba(6,182,212,0.6)]">
+                Ankit Bari
+              </h1>
+            </div>
           </div>
-        </section>
+
+          <div className="flex items-start justify-end gap-2 sm:gap-3 h-20 sm:h-24 py-1">
+          </div>
+
+        </div>
+      </div>
+
+      {/* Flowing Content Section */}
+      <div className="ml-0 mr-0 md:ml-[30%] md:mr-[30%] pt-[calc(22vh+112px)] pb-0 px-4 flex flex-col z-10 relative min-h-screen">
+        <p className="text-[14px] sm:text-[15px] text-zinc-600 dark:text-zinc-300 leading-relaxed mt-4">
+          AI Engineer | Multimodal and Multilingual model | Model Architectures, Mathematical Foundations & Custom CUDA Kernels
+        </p>
+
+        <ul className="text-[14px] sm:text-[15px] text-zinc-600 dark:text-zinc-300 leading-relaxed mt-4 pl-4">
+          <li className="flex gap-1.5"><span>•</span><span>35% Researching, 30% Building, 35% Inference & Deploying</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Trying to build models (Multimodal and Multilingual) at the best possible with the resources I have!</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Not done yet, optimize GPU for training and model for production</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Currently Building: <span className="font-semibold text-zinc-900 dark:text-white">SkyBoy</span></span></li>
+        </ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <div className="flex flex-col items-center justify-center px-4 py-5 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0a0a0a] dark:hover:bg-[#121214] border border-black/30 dark:border-white/[0.15] rounded-[6px] transition-colors duration-200">
+            <span className="text-[16px] sm:text-[18px] font-bold text-zinc-800 dark:text-zinc-100 tracking-tight leading-none">3.5+ years</span>
+            <span className="text-[13px] sm:text-[14px] text-zinc-500 dark:text-zinc-400 mt-1.5 text-center">of experimenting</span>
+          </div>
+          <div className="flex flex-col items-center justify-center px-4 py-5 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0a0a0a] dark:hover:bg-[#121214] border border-black/30 dark:border-white/[0.15] rounded-[6px] transition-colors duration-200">
+            <span className="text-[16px] sm:text-[18px] font-bold text-zinc-800 dark:text-zinc-100 tracking-tight leading-none">1.5+ years</span>
+            <span className="text-[13px] sm:text-[14px] text-zinc-500 dark:text-zinc-400 mt-1.5 text-center">of internship experience</span>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex flex-wrap items-center gap-2 mt-4">
+          <Link href="https://x.com/messages/compose?recipient_id=@bariankitvinod" target="_blank" rel="noopener noreferrer">
+            <SoftPillButton
+              as="span"
+              variant="primary"
+              className="px-3 py-1.5 !text-[12px]"
+            >
+              <div className="flex items-center gap-1.5">
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <span>DM me</span>
+              </div>
+            </SoftPillButton>
+          </Link>
+          <Link href="mailto:bariankitvinod@gmail.com">
+            <SoftPillButton
+              as="span"
+              variant="secondary"
+              className="px-3 py-1.5 !text-[12px]"
+            >
+              <div className="flex items-center gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Send an email
+              </div>
+            </SoftPillButton>
+          </Link>
+        </div>
+
+        {/* Socials */}
+        <div id="contact" className="mt-6 scroll-mt-24">
+          <h2 className="text-[14px] text-zinc-500 mb-2">Find me on the <span className="font-medium text-zinc-800 dark:text-zinc-200">Internet</span></h2>
+          <div className="flex flex-wrap gap-1.5">
+            {[
+              { name: 'GitHub', href: 'https://github.com/aijadugar', icon: <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" strokeWidth="2" fill="none"></path> },
+              { name: 'Hugging Face', href: 'https://huggingface.co/aijadugar', icon: <path d="M14.5 10a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM12 2C7 2 4 5.5 4 9c0 4 2.5 6.5 4.5 8.5C10 19 11 21 12 22c1-1 2-3 3.5-4.5C17.5 15.5 20 13 20 9c0-3.5-3-7-8-7z" stroke="currentColor" strokeWidth="2" fill="none" /> },
+              { name: 'Kaggle', href: 'https://www.kaggle.com/bariankitvinod', icon: <path d="M12 22a10 10 0 1 0-10-10 10 10 0 0 0 10 10zM8 12l3 3 5-6" stroke="currentColor" strokeWidth="2" fill="none" /> },
+              { name: 'LinkedIn', href: 'https://www.linkedin.com/in/aijadugar', icon: <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2zM4 2a2 2 0 1 1-2 2 2 2 0 0 1 2-2z" stroke="currentColor" strokeWidth="2" fill="none"></path> },
+              { name: 'Substack', href: 'https://substack.com/@aijadugar', icon: <path d="M22 8.5L12 13.5 2 8.5 2 5.5l10 5 10-5z M2 12.5h20v2.5H2z" stroke="currentColor" strokeWidth="2" fill="none" /> },
+              { name: 'Discord', href: '#', icon: <path d="M18 5c-1.5-.7-3.2-1-5-1s-3.5.3-5 1c-1.5 3.5-2.5 8-2.5 8 1.5 2 4.5 3 7.5 3s6-1 7.5-3c0 0-1-4.5-2.5-8zM9 13c-.8 0-1.5-.7-1.5-1.5S8.2 10 9 10s1.5.7 1.5 1.5S9.8 13 9 13zm6 0c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z" fill="currentColor"></path> },
+            ].map((social, i) => (
+              <SoftPillButton
+                key={i}
+                as="a"
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+                className="px-3 py-1.5 !text-[12px]"
+              >
+                <div className="flex items-center gap-1.5 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5">
+                    {social.icon}
+                  </svg>
+                  {social.name}
+                </div>
+              </SoftPillButton>
+            ))}
+            <Link href="/resume">
+              <SoftPillButton
+                as="span"
+                variant="secondary"
+                className="px-3 py-1.5 !text-[12px]"
+              >
+                <span className="flex items-center gap-1.5 opacity-70 transition-opacity duration-300 group-hover:opacity-100">
+                  <FileText className="h-3.5 w-3.5" />
+                  Resume
+                </span>
+              </SoftPillButton>
+            </Link>
+          </div>
+        </div>
+
+        {/* Experiences */}
+        <div id="experience" className="mt-6 flex flex-col relative z-10 scroll-mt-24">
+          {/* Top full-width line */}
+          <div
+            className="absolute top-0 left-[-100vw] right-[-100vw] h-0 border-t border-black/30 dark:border-[#2a303c] pointer-events-none"
+            style={{
+              maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)',
+              WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)'
+            }}
+          />
+          {/* Top Line Intersections */}
+          <div className="absolute top-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+          <div className="absolute top-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+
+          <div className="py-2 relative">
+            <h2 className="text-[18px] font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
+              <KeyBadge sectionId="experience" shortcutKey="e" />
+              Experiences
+            </h2>
+            {/* Bottom full-width line */}
+            <div
+              className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none"
+              style={{
+                maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)',
+                WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)'
+              }}
+            />
+            {/* Bottom Line Intersections */}
+            <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+          </div>
+
+          <div className="block mt-0">
+            <ExperienceList limit={3} />
+
+            {/* View All Button */}
+            <div className="py-4 px-4 -mx-4 flex justify-center relative hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors cursor-pointer rounded-b-lg mt-0">
+              <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+              {/* Bottom Line Intersections */}
+              <div className="absolute bottom-0 left-0 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+              <div className="absolute bottom-0 right-0 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+              <Link href="/experience" className="relative group block mt-0">
+                <div className="absolute -inset-[5px] border border-black/5 dark:border-white/5 rounded-[11px] pointer-events-none transition-colors duration-300 group-hover:border-black/10 dark:group-hover:border-white/10" />
+                <div className="relative flex items-center gap-1.5 px-4 py-2 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#09090b] dark:hover:bg-[#121214] text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 rounded-[6px] text-[13px] font-medium transition-all duration-300 border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80">
+                  View All
+                  <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {/* Projects */}
-        <section className="mb-4">
-          <SectionHeading>Projects</SectionHeading>
-          <div className="space-y-3">
-            {projects.map((p, i) => (
-              <div key={i}>
-                <div className="flex justify-between items-baseline text-[13px]">
-                  <span className="font-semibold">{p.name}</span>
-                  <span className="text-gray-700 text-[12.5px] whitespace-nowrap ml-4">{p.tag}</span>
+        <div id="projects" className="mt-0 flex flex-col relative z-10 scroll-mt-24">
+          <div className="py-2 relative mt-1">
+            <h2 className="text-[18px] font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
+              <KeyBadge sectionId="projects" shortcutKey="p" />
+              Projects
+            </h2>
+
+            {/* Horizontal line below Projects heading */}
+            <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+            {/* Intersections */}
+            <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 left-1/2 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+          </div>
+
+          {/* Grid Container */}
+          <div className="relative pt-6 pb-12 px-4">
+            {/* Center Vertical Line */}
+            <div className="absolute top-0 bottom-6 left-1/2 w-0 border-r border-black/30 dark:border-[#2a303c] pointer-events-none -translate-x-1/2 hidden md:block" style={{ maskImage: 'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to bottom, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+
+            <ProjectsGrid />
+
+            {/* Bottom Horizontal Line */}
+            <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+            {/* Intersections */}
+            <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            {/* Center dot removed to prevent crossing the outline gap of the View All button */}
+          </div>
+
+          {/* View All Button — the outer ring is filled with the page background
+              so the marching-dots line gets a clean gap instead of crossing the button */}
+          <div className="flex justify-center -mt-[19px] pb-0 relative z-20">
+            <Link href="/projects" className="relative group block">
+              <div className="absolute -inset-[5px] bg-white dark:bg-[#0b0e14] border border-black/5 dark:border-white/5 rounded-[11px] pointer-events-none transition-colors duration-300 group-hover:border-black/10 dark:group-hover:border-white/10" />
+              <div className="relative flex items-center gap-1.5 px-4 py-2 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#09090b] dark:hover:bg-[#121214] text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 rounded-[6px] text-[13px] font-medium transition-all duration-300 border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80">
+                View All
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Open Source Contributions */}
+        <div id="opensource" className="mt-10 scroll-mt-24">
+          <OpenSourceContributions />
+        </div>
+
+        {/* Skills */}
+        <div id="skills" className="mt-6 flex flex-col relative z-10 scroll-mt-24">
+          {/* Top full-width line */}
+          <div
+            className="absolute top-0 left-[-100vw] right-[-100vw] h-0 border-t border-black/30 dark:border-[#2a303c] pointer-events-none"
+            style={{
+              maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)',
+              WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)'
+            }}
+          />
+          {/* Top Line Intersections */}
+          <div className="absolute top-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+          <div className="absolute top-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+
+          <div className="py-2 relative mt-1">
+            <h2 className="text-[18px] font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
+              <KeyBadge sectionId="skills" shortcutKey="s" />
+              Skills & Technologies
+            </h2>
+
+            {/* Horizontal line below Skills heading */}
+            <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+            {/* Intersections */}
+            <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+          </div>
+
+          <div className="relative pt-6 pb-2 flex flex-col gap-6">
+            {skillGroups.map((group) => (
+              <div key={group.title} className="flex flex-col">
+                <h3 className="text-[12px] font-semibold uppercase tracking-[0.12em] text-zinc-400 dark:text-zinc-500 mb-3">
+                  {group.title}
+                </h3>
+                <div className="flex flex-wrap gap-2 w-full">
+                  {group.items.map((name) => (
+                    <div key={name} className="grow flex items-center justify-center px-3 py-1.5 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0a0a0a] dark:hover:bg-[#121214] border border-black/30 dark:border-white/[0.15] rounded-[6px] transition-colors duration-200 cursor-default">
+                      <span className="text-[13px] font-medium text-zinc-600 dark:text-zinc-400">{name}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-[12px] text-gray-700 italic">{p.stack}</div>
-                <Bullets items={p.bullets} />
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* Open Source Contributions */}
-        <section className="mb-4">
-          <SectionHeading>Open Source Contributions</SectionHeading>
-          <NamedBullets items={openSource} />
-        </section>
+        {/* Blogs */}
+        <div id="blogs" className="mt-6 flex flex-col relative scroll-mt-24">
+          {/* Top full-width line */}
+          <div
+            className="absolute top-0 left-[-100vw] right-[-100vw] h-0 border-t border-black/30 dark:border-[#2a303c] pointer-events-none"
+            style={{
+              maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)',
+              WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)'
+            }}
+          />
+          {/* Top Line Intersections */}
+          <div className="absolute top-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+          <div className="absolute top-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
 
-        {/* Technical Skills */}
-        <section className="mb-4">
-          <SectionHeading>Technical Skills</SectionHeading>
-          <div className="space-y-1">
-            {skills.map((s, i) => (
-              <p key={i} className="text-[12.5px] leading-snug text-gray-800">
-                <span className="font-semibold">{s.label}: </span>
-                {s.value}
-              </p>
-            ))}
+          <div className="py-2 relative mt-1">
+            <h2 className="text-[18px] font-bold text-zinc-900 dark:text-zinc-100 tracking-tight flex items-center gap-2">
+              <KeyBadge sectionId="blogs" shortcutKey="b" />
+              Blogs
+            </h2>
+
+            {/* Horizontal line below Blogs heading */}
+            <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+            {/* Intersections */}
+            <div className="absolute bottom-0 -left-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 -right-4 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
           </div>
-        </section>
 
-        {/* Achievements */}
-        <section>
-          <SectionHeading>Achievements</SectionHeading>
-          <Bullets items={achievements} />
-        </section>
+          <BlogList />
+
+          {/* View All Button */}
+          <div className="py-4 px-4 -mx-4 flex justify-center relative hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors cursor-pointer rounded-b-lg mt-0">
+            <div className="absolute bottom-0 left-[-100vw] right-[-100vw] h-0 border-b border-black/30 dark:border-[#2a303c] pointer-events-none" style={{ maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)', WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)' }} />
+            {/* Bottom Line Intersections */}
+            <div className="absolute bottom-0 left-0 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+            <div className="absolute bottom-0 right-0 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 translate-y-1/2 pointer-events-none z-20" />
+
+            <Link href="https://substack.com/@aijadugar" target="_blank" rel="noopener noreferrer" className="relative group block mt-0">
+              <div className="absolute -inset-[5px] border border-black/5 dark:border-white/5 rounded-[11px] pointer-events-none transition-colors duration-300 group-hover:border-black/10 dark:group-hover:border-white/10" />
+              <div className="relative flex items-center gap-1.5 px-4 py-2 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#09090b] dark:hover:bg-[#121214] text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 rounded-[6px] text-[13px] font-medium transition-all duration-300 border border-black/5 dark:border-white/5 shadow-sm shadow-black/20 dark:shadow-lg dark:shadow-black/80">
+                View All
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-zinc-300 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Fading Grid Filler */}
+        <div className="flex-grow w-[calc(100%+32px)] -mx-4 h-[300px] relative mt-4">
+          {/* Top full-width line */}
+          <div
+            className="absolute top-0 left-[-100vw] right-[-100vw] h-0 border-t border-black/30 dark:border-[#2a303c] pointer-events-none z-10"
+            style={{
+              maskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)',
+              WebkitMaskImage: 'repeating-linear-gradient(to right, black 0, black 1px, transparent 1px, transparent 6px)'
+            }}
+          />
+          {/* Intersections */}
+          <div className="absolute top-0 left-0 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+          <div className="absolute top-0 right-0 w-[2px] h-[2px] bg-black/50 dark:bg-[#4f46e5]/[0.35] translate-x-1/2 -translate-y-1/2 pointer-events-none z-20" />
+
+          <FooterBackground />
+        </div>
+
       </div>
+
     </div>
   );
 }
