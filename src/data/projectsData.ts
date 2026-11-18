@@ -28,11 +28,31 @@ import {
 
 export type TechIcon = ComponentType<{ className?: string }>;
 export type TechKey =
-  | "next" | "ts" | "react" | "prisma" | "cloud" | "langchain" | "node" | "motion"
-  | "tailwind" | "bun" | "eslint" | "radixui" | "charts" | "github" | "fastapi"
-  | "redis" | "tldraw" | "css3" | "python" | "anthropic" | "claude" | "gemini" | "llama";
+  | "next"
+  | "ts"
+  | "react"
+  | "prisma"
+  | "cloud"
+  | "langchain"
+  | "node"
+  | "motion"
+  | "tailwind"
+  | "bun"
+  | "eslint"
+  | "radixui"
+  | "charts"
+  | "github"
+  | "fastapi"
+  | "redis"
+  | "tldraw"
+  | "css3"
+  | "python"
+  | "anthropic"
+  | "claude"
+  | "gemini"
+  | "llama";
 
-export type TechItem = TechKey | { label: string; tooltip?: string; };
+export type TechItem = TechKey | { label: string; tooltip?: string };
 
 export type ProjectStatus = "live" | "building";
 
@@ -54,41 +74,75 @@ export interface Project {
 }
 
 export const iconMap: Record<TechKey, TechIcon> = {
-  next: SiNextdotjs, ts: SiTypescript, react: SiReact, prisma: SiPrisma,
-  cloud: SiCloudflare, langchain: SiLangchain, node: SiNodedotjs,
-  motion: SiFramer, tailwind: SiTailwindcss, bun: SiBun, eslint: SiEslint, radixui: SiRadixui,
-  charts: SiChartdotjs, github: SiGithub, fastapi: SiFastapi, redis: SiRedis,
-  tldraw: SiTldraw, css3: SiCss, python: SiPython, anthropic: SiAnthropic, claude: SiClaude,
-  gemini: SiGooglegemini, llama: SiMeta,
+  next: SiNextdotjs,
+  ts: SiTypescript,
+  react: SiReact,
+  prisma: SiPrisma,
+  cloud: SiCloudflare,
+  langchain: SiLangchain,
+  node: SiNodedotjs,
+  motion: SiFramer,
+  tailwind: SiTailwindcss,
+  bun: SiBun,
+  eslint: SiEslint,
+  radixui: SiRadixui,
+  charts: SiChartdotjs,
+  github: SiGithub,
+  fastapi: SiFastapi,
+  redis: SiRedis,
+  tldraw: SiTldraw,
+  css3: SiCss,
+  python: SiPython,
+  anthropic: SiAnthropic,
+  claude: SiClaude,
+  gemini: SiGooglegemini,
+  llama: SiMeta,
 };
 
 export const techNames: Record<TechKey, string> = {
-  next: "Next.js", ts: "TypeScript", react: "React", prisma: "Prisma",
-  cloud: "Cloudflare", langchain: "LangChain", node: "Node.js", motion: "Framer Motion",
-  tailwind: "Tailwind CSS", bun: "Bun", eslint: "ESLint",
-  radixui: "Radix UI", charts: "Charts", github: "GitHub API", fastapi: "FastAPI", redis: "Redis",
-  tldraw: "tldraw", css3: "CSS3", python: "Python", anthropic: "Anthropic",
-  claude: "Claude", gemini: "Gemini", llama: "LLaMA",
+  next: "Next.js",
+  ts: "TypeScript",
+  react: "React",
+  prisma: "Prisma",
+  cloud: "Cloudflare",
+  langchain: "LangChain",
+  node: "Node.js",
+  motion: "Framer Motion",
+  tailwind: "Tailwind CSS",
+  bun: "Bun",
+  eslint: "ESLint",
+  radixui: "Radix UI",
+  charts: "Charts",
+  github: "GitHub API",
+  fastapi: "FastAPI",
+  redis: "Redis",
+  tldraw: "tldraw",
+  css3: "CSS3",
+  python: "Python",
+  anthropic: "Anthropic",
+  claude: "Claude",
+  gemini: "Gemini",
+  llama: "LLaMA",
 };
 
 export const projectsData: Project[] = [
-    {
+  {
     slug: "skyboy",
     title: "SkyBoy",
     imageTitle: "SkyBoy",
     src: "/skyboy.png",
     lightModeSrc: "/skyboy.png",
     video: "",
-    description:
-      "Agent-agnostic directory of AI skills (SKILL.md) — preview, install, and ship them to Claude, ChatGPT, Cursor, and Gemini CLI.",
+    description: "Your second brain for AI coding agents.",
     tech: [
       { label: "Next.js" },
       { label: "TypeScript" },
-      { label: "AI Skills" },
-      { label: "Claude" },
-      { label: "ChatGPT" },
-      { label: "Cursor" },
-      { label: "Gemini CLI" },
+      { label: "Desktop Application" },
+      { label: "Node.js" },
+      { label: "Cross-Platform" },
+      { label: "Automation" },
+      { label: "Native Notifications" },
+      { label: "Agent Hooks" },
     ],
     github: "https://github.com/aijadugar/skyboy",
     live: "https://skyboy.in",
@@ -123,50 +177,39 @@ export const projectsData: Project[] = [
     status: "live",
   },
   {
-    slug: "mini-interfaze",
-    title: "Mini-Interfaze: Receipt Field Extractor",
-    imageTitle: "Mini-Interfaze",
-    src: "/mini-interfaze.png",
-    lightModeSrc: "/mini-interfaze.png",
+    slug: "know-when-you-dont-know",
+    title: "Know When You Don't Know",
+    imageTitle: "Know When You Don't Know",
+    src: "/know-when-you-dont-know.png",
+    lightModeSrc: "/know-when-you-dont-know.png",
     video: "",
     description:
-      "CRNN encoder + Transformer decoder for receipt field extraction (vendor, date, total, address) with bounding boxes. Custom fused CUDA kernel (RMSNorm + residual) speeds up training.",
-    tech: [
-      { label: "PyTorch" },
-      { label: "CUDA" },
-      { label: "CRNN" },
-      { label: "Transformers" },
-      { label: "EasyOCR" },
-      { label: "Safetensors" },
-      { label: "Hugging Face" },
-      { label: "Gradio" },
-    ],
-    github: "https://github.com/aijadugar/mini-interfaze",
-    live: "https://huggingface.co/spaces/aijadugar/mini-interfaze-receipt-extractor",
-    backgroundImage: "/mini-interfaze.png",
+      "An LLM confidence and uncertainty project that identifies when models know an answer versus when they are guessing or hallucinating.",
+    tech: [{ label: "Python" }, { label: "Jupyter Notebook" }],
+    github: "https://github.com/aijadugar/Know-When-You-Don-t-Know",
+    live: "",
+    backgroundImage: "/placeholder.png",
     hasPin: false,
     status: "live",
   },
   {
-    slug: "wispr-flow-clone",
-    title: "Wispr Flow Clone",
-    imageTitle: "Wispr Flow Clone",
-    src: "/wisprflow-clone.png",
-    lightModeSrc: "/wisprflow-clone.png",
+    slug: "satbara-saathi",
+    title: "Satbara Saathi",
+    imageTitle: "Satbara Saathi",
+    src: "/satbara-sathi.png",
+    lightModeSrc: "/satbara-sathi.png",
     video: "",
     description:
-      "Two-stage pipeline: Whisper for verbatim transcription, then an LLM cleans fillers, grammar, and tone across email/chat/notes. Custom fused CUDA kernel (bias-add + GELU) speeds up inference.",
+      "Understand Maharashtra 7/12 (Satbara) extracts in plain Marathi / Hindi / English with user follow-ups.",
     tech: [
-      { label: "PyTorch" },
-      { label: "CUDA" },
-      { label: "Transformers" },
-      { label: "Whisper" },
-      { label: "Hugging Face" },
-      { label: "Gradio" },
+      { label: "JavaScript" },
+      { label: "Python" },
+      { label: "CSS" },
+      { label: "HTML" },
     ],
-    github: "https://github.com/aijadugar/wisprflow-clone",
-    live: "https://huggingface.co/spaces/aijadugar/wisprflow-clone",
-    backgroundImage: "/wisprflow-clone.png",
+    github: "https://github.com/aijadugar/satbara-saathi",
+    live: "",
+    backgroundImage: "/placeholder.png",
     hasPin: false,
     status: "live",
   },
