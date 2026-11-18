@@ -43,7 +43,7 @@ const experiences: ExperienceData[] = [
       "Automation",
     ],
     metrics: [
-      { label: "Duration", value: "4 mos" },
+      { label: "Duration", value: "9 mos" },
       { label: "Launched", value: "Jun 2026" },
     ],
   },
