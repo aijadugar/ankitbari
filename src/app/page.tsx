@@ -17,35 +17,44 @@ const skillGroups = [
     title: "Languages & Frameworks",
     items: [
       "React",
+      "Next.js",
       "Node.js",
-      "Python",
-      "CUDA",
-      "SQL",
-      "Bash",
       "Express.js",
+      "Python",
       "FastAPI",
       "Flask",
-      "AI Agents",
+      "C++",
+      "CUDA",
+      "Bash",
+      "SQL",
     ],
   },
   {
-    title: "Libraries",
+    title: "ML & LLM Libraries",
     items: [
-      "numpy",
       "pandas",
+      "numpy",
       "scikit-learn",
-      "huggingface",
-      "pytorch",
-      "helion",
-      "torchtitan",
-      "ao",
-      "executorch",
       "transformers",
-      "peft",
-      "accelerate",
-      "kernels",
-      "optimum",
+      "PEFT",
+      "torchtitan",
+      "pytorch",
+      "huggingface",
     ],
+  },
+  {
+    title: "Agentic AI",
+    items: [
+      "AI Agents",
+      "RAG",
+      "MCP",
+      "Multi-Agent Systems",
+      "LLM Evaluation",
+    ],
+  },
+  {
+    title: "Data & Tools",
+    items: ["MongoDB", "Redis", "Chroma DB", "Docker", "Git", "CI/CD"],
   },
 ];
 
@@ -148,14 +157,14 @@ export default function Home() {
       {/* Flowing Content Section */}
       <div className="ml-0 mr-0 md:ml-[30%] md:mr-[30%] pt-[calc(22vh+112px)] pb-0 px-4 flex flex-col z-10 relative min-h-screen">
         <p className="text-[14px] sm:text-[15px] text-zinc-600 dark:text-zinc-300 leading-relaxed mt-4">
-          AI Engineer | Multimodal and Multilingual model | Model Architectures, Mathematical Foundations & Custom CUDA Kernels
+          AI Engineer & Founder | Shipping open source, building SkyBoy
         </p>
 
         <ul className="text-[14px] sm:text-[15px] text-zinc-600 dark:text-zinc-300 leading-relaxed mt-4 pl-4">
-          <li className="flex gap-1.5"><span>•</span><span>35% Researching, 30% Building, 35% Inference & Deploying</span></li>
-          <li className="flex gap-1.5"><span>•</span><span>Trying to build models (Multimodal and Multilingual) at the best possible with the resources I have!</span></li>
-          <li className="flex gap-1.5"><span>•</span><span>Not done yet, optimize GPU for training and model for production</span></li>
-          <li className="flex gap-1.5"><span>•</span><span>Currently Building: <span className="font-semibold text-zinc-900 dark:text-white">SkyBoy</span></span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Currently Building: <span className="font-semibold text-zinc-900 dark:text-white">SkyBoy</span>, a second brain for Claude Code and Codex that keeps long tasks moving</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Making models that know when they don't know, instead of hallucinating</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Open-source models on Hugging Face with 100k+ downloads, and 60+ PRs merged into agent platforms</span></li>
+          <li className="flex gap-1.5"><span>•</span><span>Not done yet, still optimizing GPUs for training and models for production</span></li>
         </ul>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
           <div className="flex flex-col items-center justify-center px-4 py-5 bg-zinc-50 hover:bg-zinc-100 dark:bg-[#0a0a0a] dark:hover:bg-[#121214] border border-black/30 dark:border-white/[0.15] rounded-[6px] transition-colors duration-200">
