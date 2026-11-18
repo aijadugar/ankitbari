@@ -20,24 +20,24 @@ const experiences: ExperienceData[] = [
     title: "Skyboy",
     role: "Founder",
     type: "Self-employed",
-    dates: "Jun 2026 - Present",
+    dates: "Mar 2026 - Present",
     location: "Remote",
     description: `
-      A fast, searchable, agent-agnostic directory of portable AI skills (SKILL.md) and plugins.
-      Ships as a website, docs site, dual-distribution CLI (npm + PyPI), and an MCP server so any skill is one command away from Claude Code, Cursor, Windsurf, Gemini CLI, Codex, ChatGPT, and Claude Desktop.
+      Coding agents can now work for an hour without you, but you shouldn’t have to sit and watch them to know when they’ve stopped.
+      Skyboy is the desktop app we built so that Claude Code and Codex tell you the moment they finish or need your permission, then pick up the next task you’ve already lined up, so you stay in control while the work keeps moving.
     `,
     tech: [
       "Next.js",
       "TypeScript",
-      "MCP",
+      "Desktop Application",
       "Node.js",
-      "Python",
-      "CLI Tooling",
-      "Monorepo",
-      "Docs",
+      "Cross-Platform",
+      "Native Notifications",
+      "Agent Hooks",
+      "Automation",
     ],
     metrics: [
-      { label: "Duration", value: "4 mos" },
+      { label: "Duration", value: "9 mos" },
       { label: "Launched", value: "Jun 2026" },
     ],
   },
